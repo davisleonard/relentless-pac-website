@@ -63,10 +63,15 @@
             transition: color 0.5s ease;
         }
 
-        /* Stage hero areas - full width, immersive */
+        /* Hero container - holds stage-specific content */
+        .hero-container {
+            margin-bottom: 24px;
+        }
+
+        /* Stage hero areas - integrated with info panel */
         .stage-hero {
             display: none;
-            padding: 30px 20px;
+            padding: 0;
             animation: fadeSlideIn 0.6s ease;
         }
 
@@ -81,80 +86,63 @@
 
         /* Onboarding hero - cinematic video */
         .hero-video-wrapper {
-            max-width: 900px;
+            max-width: 100%;
             margin: 0 auto;
             position: relative;
         }
 
         .hero-video-label {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 16px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 12px;
             font-weight: 600;
         }
 
         .hero-video {
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             background: #000;
             position: relative;
         }
 
-        .hero-video::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(135deg, #86c7ed, #182d53, #86c7ed);
-            border-radius: 22px;
-            z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .hero-video video {
-            width: 100%;
-            display: block;
-            border-radius: 20px;
+        .hero-video iframe {
+            border-radius: 16px;
         }
 
         /* Resources hero - GIF showcase */
         .hero-gif-wrapper {
-            max-width: 900px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
         .hero-gif-label {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #7a8fa6;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             font-weight: 600;
         }
 
         .hero-gif {
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 15px 50px rgba(24, 45, 83, 0.2);
+            box-shadow: 0 10px 40px rgba(24, 45, 83, 0.15);
             background: #fff;
         }
 
         .hero-gif img {
             width: 100%;
             display: block;
-            border-radius: 20px;
+            border-radius: 16px;
         }
 
-        /* Palooza hero - explosive screenshot wall */
+        /* Palooza hero - screenshot wall */
         .hero-palooza {
             max-width: 100%;
             overflow: hidden;
@@ -165,20 +153,20 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
-            padding: 20px;
-            max-width: 1200px;
+            gap: 10px;
+            padding: 10px 0;
+            max-width: 100%;
             margin: 0 auto;
         }
 
         .screenshot-item {
-            width: 140px;
-            height: 140px;
-            border-radius: 12px;
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             animation: popIn 0.5s ease backwards;
         }
 
@@ -681,17 +669,12 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #182d53, #86c7ed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #182d53;
         }
 
         body.stage-2 .stat-value,
         body.stage-4 .stat-value {
-            background: linear-gradient(135deg, #fff, #86c7ed);
-            -webkit-background-clip: text;
-            background-clip: text;
+            color: #fff;
         }
 
         .stat-label {
@@ -701,428 +684,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
-        }
-
-        /* === INTERACTIVE FUNNEL VISUALIZATION === */
-        .impact-dashboard {
-            background: linear-gradient(135deg, #182d53 0%, #2a4a7a 100%);
-            padding: 60px 20px;
-            margin-top: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .impact-dashboard::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2386c7ed' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
-        }
-
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dashboard-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #86c7ed;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .dashboard-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Funnel visualization */
-        .funnel-container {
-            max-width: 900px;
-            margin: 0 auto 50px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .funnel-stage {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-            opacity: 0;
-            transform: translateX(-30px);
-            transition: all 0.6s ease;
-        }
-
-        .funnel-stage.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .funnel-bar-container {
-            flex: 1;
-            position: relative;
-            height: 60px;
-            display: flex;
-            align-items: center;
-        }
-
-        .funnel-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #86c7ed, #5fb3e0);
-            border-radius: 8px;
-            position: relative;
-            min-width: 60px;
-            transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 20px rgba(134, 199, 237, 0.3);
-            display: flex;
-            align-items: center;
-            padding-left: 20px;
-        }
-
-        .funnel-stage:nth-child(2) .funnel-bar {
-            background: linear-gradient(90deg, #5fb3e0, #4a9fd4);
-        }
-
-        .funnel-stage:nth-child(3) .funnel-bar {
-            background: linear-gradient(90deg, #4a9fd4, #3d8bc0);
-        }
-
-        .funnel-stage:nth-child(4) .funnel-bar {
-            background: linear-gradient(90deg, #3d8bc0, #fff);
-        }
-
-        .funnel-number {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #182d53;
-            white-space: nowrap;
-        }
-
-        .funnel-stage:nth-child(4) .funnel-number {
-            color: #182d53;
-        }
-
-        .funnel-label {
-            width: 160px;
-            text-align: right;
-            padding-right: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.9);
-            line-height: 1.3;
-        }
-
-        .funnel-percent {
-            position: absolute;
-            right: -70px;
-            font-size: 0.8rem;
-            color: #86c7ed;
-            font-weight: 700;
-        }
-
-        /* Metrics grid */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .metric-card {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 28px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #86c7ed, #5fb3e0);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-
-        .metric-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-4px);
-            border-color: rgba(134, 199, 237, 0.4);
-        }
-
-        .metric-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .metric-icon {
-            font-size: 2rem;
-            margin-bottom: 12px;
-        }
-
-        .metric-value {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 6px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            font-weight: 600;
-        }
-
-        .metric-sublabel {
-            font-size: 0.7rem;
-            color: #86c7ed;
-            margin-top: 8px;
-            font-weight: 500;
-        }
-
-        /* ROI Calculator */
-        .roi-section {
-            max-width: 600px;
-            margin: 50px auto 0;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .roi-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .roi-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .roi-subtitle {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.6);
-            margin-top: 6px;
-        }
-
-        .roi-slider-container {
-            margin-bottom: 20px;
-        }
-
-        .roi-slider-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 10px;
-        }
-
-        .roi-slider-value {
-            color: #86c7ed;
-            font-weight: 700;
-        }
-
-        .roi-slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.1);
-            outline: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-        }
-
-        .roi-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #86c7ed, #5fb3e0);
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(134, 199, 237, 0.5);
-            transition: transform 0.2s ease;
-        }
-
-        .roi-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
-        }
-
-        .roi-results {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .roi-result {
-            text-align: center;
-            padding: 16px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-        }
-
-        .roi-result-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #86c7ed;
-        }
-
-        .roi-result-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.6);
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* State breakdown toggle */
-        .state-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 40px auto 0;
-            flex-wrap: wrap;
-            max-width: 800px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .state-btn {
-            padding: 10px 18px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.8);
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .state-btn:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: #86c7ed;
-        }
-
-        .state-btn.active {
-            background: linear-gradient(135deg, #86c7ed, #5fb3e0);
-            color: #182d53;
-            border-color: transparent;
-        }
-
-        /* Tech peek section */
-        .tech-peek {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        .tech-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 10px;
-            opacity: 0.7;
-            transition: opacity 0.2s ease;
-        }
-
-        .tech-header:hover {
-            opacity: 1;
-        }
-
-        .tech-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .tech-toggle-icon {
-            transition: transform 0.3s ease;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .tech-peek.expanded .tech-toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        .tech-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-        }
-
-        .tech-peek.expanded .tech-content {
-            max-height: 400px;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            padding: 20px 0;
-        }
-
-        .tech-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .tech-icon {
-            font-size: 1.5rem;
-        }
-
-        .tech-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .tech-desc {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.6);
-            margin-top: 2px;
         }
 
         /* Responsive */
@@ -1150,48 +711,6 @@
     <div class="header">
         <h1>The Participant Journey</h1>
         <p class="subtitle">Follow one person through our program — click any stage to explore, or hit play to watch the full journey unfold.</p>
-    </div>
-
-    <!-- Stage-specific hero sections -->
-    <div class="container">
-        <!-- Onboarding hero - cinematic video -->
-        <div class="stage-hero" id="hero-onboarding">
-            <div class="hero-video-wrapper">
-                <div class="hero-video-label">Watch: What's at Stake (PA 2025)</div>
-                <div class="hero-video">
-                    <iframe
-                        width="100%"
-                        height="506"
-                        src="https://www.youtube.com/embed/Yq3KO8hCWcA"
-                        title="What's at Stake - PA 2025"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        style="border-radius: 20px;">
-                    </iframe>
-                </div>
-            </div>
-        </div>
-
-        <!-- Resources hero - GIF showcase -->
-        <div class="stage-hero" id="hero-resources">
-            <div class="hero-gif-wrapper">
-                <div class="hero-gif-label">2024 Resource Hub</div>
-                <div class="hero-gif">
-                    <img src="Rally Gifs resource.gif" alt="Rally platform demonstration">
-                </div>
-            </div>
-        </div>
-
-        <!-- Palooza hero - screenshot explosion -->
-        <div class="stage-hero" id="hero-palooza">
-            <div class="hero-palooza">
-                <div class="screenshot-explosion" id="screenshotWall">
-                    <!-- Filled by JS -->
-                </div>
-                <div class="palooza-label">Real messages from our 2023 Mississippi program — click any to explore</div>
-            </div>
-        </div>
     </div>
 
     <div class="journey-wrapper">
@@ -1226,6 +745,48 @@
             <div class="journey-dot" id="journeyDot"></div>
         </div>
 
+        <!-- Stage-specific hero sections - integrated above info panel -->
+        <div class="hero-container">
+            <!-- Onboarding hero - cinematic video -->
+            <div class="stage-hero" id="hero-onboarding">
+                <div class="hero-video-wrapper">
+                    <div class="hero-video-label">Watch: What's at Stake (PA 2025)</div>
+                    <div class="hero-video">
+                        <iframe
+                            width="100%"
+                            height="506"
+                            src="https://www.youtube.com/embed/Yq3KO8hCWcA"
+                            title="What's at Stake - PA 2025"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            style="border-radius: 20px;">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources hero - GIF showcase -->
+            <div class="stage-hero" id="hero-resources">
+                <div class="hero-gif-wrapper">
+                    <div class="hero-gif-label">2024 Resource Hub</div>
+                    <div class="hero-gif">
+                        <img src="Rally Gifs resource.gif" alt="Rally platform demonstration">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Palooza hero - screenshot explosion -->
+            <div class="stage-hero" id="hero-palooza">
+                <div class="hero-palooza">
+                    <div class="screenshot-explosion" id="screenshotWall">
+                        <!-- Filled by JS -->
+                    </div>
+                    <div class="palooza-label">Real messages from our 2023 Mississippi program — click any to explore</div>
+                </div>
+            </div>
+        </div>
+
         <div class="info-panel" id="infoPanel">
             <!-- Content injected by JS -->
         </div>
@@ -1238,181 +799,16 @@
 
         <div class="stats-footer">
             <div class="stat">
-                <div class="stat-value" data-count="97380">0</div>
+                <div class="stat-value">97,380</div>
                 <div class="stat-label">Applied in 2024</div>
             </div>
             <div class="stat">
-                <div class="stat-value" data-count="27146">0</div>
+                <div class="stat-value">27,146</div>
                 <div class="stat-label">Completed Program</div>
             </div>
             <div class="stat">
-                <div class="stat-value" data-count="1014902">0</div>
+                <div class="stat-value">1,014,902</div>
                 <div class="stat-label">Voters Reached</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- IMPACT DASHBOARD - For Funders & Partners -->
-    <div class="impact-dashboard" id="impactDashboard">
-        <div class="dashboard-header">
-            <div class="dashboard-label">2024 Program Impact</div>
-            <div class="dashboard-title">The Full Picture</div>
-        </div>
-
-        <!-- Conversion Funnel -->
-        <div class="funnel-container">
-            <div class="funnel-stage" data-delay="0">
-                <div class="funnel-label">Applied</div>
-                <div class="funnel-bar-container">
-                    <div class="funnel-bar" data-width="100">
-                        <span class="funnel-number" data-count="97380">0</span>
-                    </div>
-                    <span class="funnel-percent">100%</span>
-                </div>
-            </div>
-            <div class="funnel-stage" data-delay="200">
-                <div class="funnel-label">Accepted</div>
-                <div class="funnel-bar-container">
-                    <div class="funnel-bar" data-width="79">
-                        <span class="funnel-number" data-count="77340">0</span>
-                    </div>
-                    <span class="funnel-percent">79.4%</span>
-                </div>
-            </div>
-            <div class="funnel-stage" data-delay="400">
-                <div class="funnel-label">Completed Program</div>
-                <div class="funnel-bar-container">
-                    <div class="funnel-bar" data-width="28">
-                        <span class="funnel-number" data-count="27146">0</span>
-                    </div>
-                    <span class="funnel-percent">27.9%</span>
-                </div>
-            </div>
-            <div class="funnel-stage" data-delay="600">
-                <div class="funnel-label">Voters Reached</div>
-                <div class="funnel-bar-container">
-                    <div class="funnel-bar" data-width="100">
-                        <span class="funnel-number" data-count="1014902">0</span>
-                    </div>
-                    <span class="funnel-percent">37× multiplier</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Metrics Grid -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon">💬</div>
-                <div class="metric-value" data-count="44.1" data-decimal="1">0</div>
-                <div class="metric-label">Avg Contacts / Participant</div>
-                <div class="metric-sublabel">1.2M total conversations</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">✅</div>
-                <div class="metric-value" data-count="84" data-suffix="%">0%</div>
-                <div class="metric-label">Made Vote Plans</div>
-                <div class="metric-sublabel">Of all contacts reached</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📱</div>
-                <div class="metric-value" data-count="38" data-suffix="M">0M</div>
-                <div class="metric-label">SMS Sent</div>
-                <div class="metric-sublabel">For recruitment</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">🎤</div>
-                <div class="metric-value" data-count="1329">0</div>
-                <div class="metric-label">Events Hosted</div>
-                <div class="metric-sublabel">By 90 event leads</div>
-            </div>
-        </div>
-
-        <!-- ROI Calculator -->
-        <div class="roi-section">
-            <div class="roi-header">
-                <div class="roi-title">Cost-Per-Contact Calculator</div>
-                <div class="roi-subtitle">See how relational organizing compares</div>
-            </div>
-            <div class="roi-slider-container">
-                <div class="roi-slider-label">
-                    <span>Program Budget</span>
-                    <span class="roi-slider-value" id="budgetValue">$2,000,000</span>
-                </div>
-                <input type="range" class="roi-slider" id="budgetSlider" min="500000" max="5000000" step="100000" value="2000000">
-            </div>
-            <div class="roi-results">
-                <div class="roi-result">
-                    <div class="roi-result-value" id="costPerContact">$1.97</div>
-                    <div class="roi-result-label">Cost per voter reached</div>
-                </div>
-                <div class="roi-result">
-                    <div class="roi-result-value" id="costPerComplete">$73.69</div>
-                    <div class="roi-result-label">Cost per completer</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- State Breakdown Toggle -->
-        <div class="state-toggle">
-            <button class="state-btn active" data-state="all">All States</button>
-            <button class="state-btn" data-state="PA">Pennsylvania</button>
-            <button class="state-btn" data-state="AZ">Arizona</button>
-            <button class="state-btn" data-state="GA">Georgia</button>
-            <button class="state-btn" data-state="MI">Michigan</button>
-            <button class="state-btn" data-state="WI">Wisconsin</button>
-        </div>
-
-        <!-- Tech Stack Peek -->
-        <div class="tech-peek" id="techPeek">
-            <div class="tech-header" onclick="document.getElementById('techPeek').classList.toggle('expanded')">
-                <span class="tech-label">Under the Hood: Our Tech Stack</span>
-                <span class="tech-toggle-icon">▾</span>
-            </div>
-            <div class="tech-content">
-                <div class="tech-grid">
-                    <div class="tech-item">
-                        <div class="tech-icon">🗄️</div>
-                        <div>
-                            <div class="tech-name">Rally Platform</div>
-                            <div class="tech-desc">Custom-built participant management</div>
-                        </div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon">📊</div>
-                        <div>
-                            <div class="tech-name">Voter File Integration</div>
-                            <div class="tech-desc">83% auto-match rate</div>
-                        </div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon">🔐</div>
-                        <div>
-                            <div class="tech-name">Fraud Detection</div>
-                            <div class="tech-desc">ML-powered verification</div>
-                        </div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon">📈</div>
-                        <div>
-                            <div class="tech-name">Hiring Tiers</div>
-                            <div class="tech-desc">5-tier scoring algorithm</div>
-                        </div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon">🔗</div>
-                        <div>
-                            <div class="tech-name">Magic Links</div>
-                            <div class="tech-desc">One-click auth + Zoom join</div>
-                        </div>
-                    </div>
-                    <div class="tech-item">
-                        <div class="tech-icon">📱</div>
-                        <div>
-                            <div class="tech-name">SMS Infrastructure</div>
-                            <div class="tech-desc">38M messages delivered</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1837,150 +1233,11 @@
         window.addEventListener('load', () => {
             generateScreenshotWall();
             setTimeout(() => updateStage(0, false), 100);
-            initAnimatedCounters();
-            initFunnelAnimation();
-            initROICalculator();
-            initStateToggle();
         });
 
         window.addEventListener('resize', () => {
             journeyDot.style.left = getDotPosition(currentStage) + 'px';
         });
-
-        // === ANIMATED COUNTERS ===
-        function animateCounter(element, target, duration = 2000, decimal = 0, suffix = '') {
-            const start = 0;
-            const startTime = performance.now();
-
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-
-                // Easing function (ease-out)
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                const current = start + (target - start) * easeOut;
-
-                if (decimal > 0) {
-                    element.textContent = current.toFixed(decimal) + suffix;
-                } else {
-                    element.textContent = Math.floor(current).toLocaleString() + suffix;
-                }
-
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
-            }
-
-            requestAnimationFrame(update);
-        }
-
-        function initAnimatedCounters() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const element = entry.target;
-                        const target = parseFloat(element.dataset.count);
-                        const decimal = parseInt(element.dataset.decimal) || 0;
-                        const suffix = element.dataset.suffix || '';
-
-                        if (!element.classList.contains('counted')) {
-                            element.classList.add('counted');
-                            animateCounter(element, target, 2000, decimal, suffix);
-                        }
-                    }
-                });
-            }, { threshold: 0.5 });
-
-            document.querySelectorAll('[data-count]').forEach(el => {
-                observer.observe(el);
-            });
-        }
-
-        // === FUNNEL ANIMATION ===
-        function initFunnelAnimation() {
-            const funnelObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const stages = document.querySelectorAll('.funnel-stage');
-                        stages.forEach((stage, index) => {
-                            const delay = parseInt(stage.dataset.delay) || 0;
-                            setTimeout(() => {
-                                stage.classList.add('visible');
-                                const bar = stage.querySelector('.funnel-bar');
-                                const width = bar.dataset.width;
-                                bar.style.width = width + '%';
-                            }, delay);
-                        });
-                        funnelObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.3 });
-
-            const funnelContainer = document.querySelector('.funnel-container');
-            if (funnelContainer) {
-                funnelObserver.observe(funnelContainer);
-            }
-        }
-
-        // === ROI CALCULATOR ===
-        function initROICalculator() {
-            const slider = document.getElementById('budgetSlider');
-            const budgetValue = document.getElementById('budgetValue');
-            const costPerContact = document.getElementById('costPerContact');
-            const costPerComplete = document.getElementById('costPerComplete');
-
-            if (!slider) return;
-
-            const votersReached = 1014902;
-            const completers = 27146;
-
-            function updateROI() {
-                const budget = parseInt(slider.value);
-                budgetValue.textContent = '$' + budget.toLocaleString();
-
-                const cpc = budget / votersReached;
-                const cpComplete = budget / completers;
-
-                costPerContact.textContent = '$' + cpc.toFixed(2);
-                costPerComplete.textContent = '$' + cpComplete.toFixed(2);
-            }
-
-            slider.addEventListener('input', updateROI);
-            updateROI();
-        }
-
-        // === STATE TOGGLE (Mock Data) ===
-        const stateData = {
-            all: { applied: 97380, completed: 27146, voters: 1014902 },
-            PA: { applied: 28500, completed: 8200, voters: 310000 },
-            AZ: { applied: 18200, completed: 5100, voters: 195000 },
-            GA: { applied: 21400, completed: 5900, voters: 225000 },
-            MI: { applied: 16800, completed: 4600, voters: 168000 },
-            WI: { applied: 12480, completed: 3346, voters: 116902 }
-        };
-
-        function initStateToggle() {
-            const buttons = document.querySelectorAll('.state-btn');
-
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    buttons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    const state = btn.dataset.state;
-                    const data = stateData[state];
-
-                    // Update funnel numbers with animation
-                    const funnelNumbers = document.querySelectorAll('.funnel-number');
-                    if (funnelNumbers.length >= 4) {
-                        animateCounter(funnelNumbers[0], data.applied, 800);
-                        animateCounter(funnelNumbers[1], Math.round(data.applied * 0.794), 800);
-                        animateCounter(funnelNumbers[2], data.completed, 800);
-                        animateCounter(funnelNumbers[3], data.voters, 800);
-                    }
-                });
-            });
-        }
     </script>
 </body>
 </html>
