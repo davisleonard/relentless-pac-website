@@ -142,62 +142,133 @@
             border-radius: 16px;
         }
 
-        /* Palooza hero - Floating/Drifting Wall */
+        /* Palooza hero - Ticker/Marquee + Hero */
         .hero-palooza {
             max-width: 100%;
             overflow: hidden;
             position: relative;
         }
 
-        .floating-wall {
+        .ticker-hero-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Main hero image */
+        .ticker-hero {
             position: relative;
             width: 100%;
-            height: 400px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 16px;
             overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            background: rgba(24, 45, 83, 0.9);
+            cursor: pointer;
         }
 
-        .floating-item {
+        .ticker-hero::before {
+            content: '';
             position: absolute;
-            border-radius: 12px;
+            inset: -3px;
+            background: linear-gradient(135deg, #86c7ed, #fff, #86c7ed);
+            border-radius: 19px;
+            z-index: -1;
+            opacity: 0.7;
+            animation: heroGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+        }
+
+        .ticker-hero img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            display: block;
+            transition: opacity 0.4s ease;
+        }
+
+        .ticker-hero img.fade-out {
+            opacity: 0;
+        }
+
+        /* Scrolling ticker */
+        .ticker-wrapper {
+            overflow: hidden;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .ticker-wrapper::before,
+        .ticker-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .ticker-wrapper::before {
+            left: 0;
+            background: linear-gradient(90deg, rgba(134, 199, 237, 0.3), transparent);
+        }
+
+        .ticker-wrapper::after {
+            right: 0;
+            background: linear-gradient(-90deg, rgba(24, 45, 83, 0.5), transparent);
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 12px;
+            animation: tickerScroll 30s linear infinite;
+            width: max-content;
+        }
+
+        .ticker-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            flex-shrink: 0;
+            width: 100px;
+            height: 80px;
+            border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        box-shadow 0.6s ease,
-                        z-index 0s;
-            will-change: transform;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .floating-item img {
+        .ticker-item:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .ticker-item.active {
+            opacity: 1;
+            box-shadow: 0 0 0 3px #86c7ed, 0 8px 25px rgba(134, 199, 237, 0.4);
+            transform: scale(1.05);
+        }
+
+        .ticker-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
-        }
-
-        .floating-item:hover {
-            transform: scale(1.1) !important;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-            z-index: 100 !important;
-        }
-
-        /* Featured/spotlight state */
-        .floating-item.featured {
-            z-index: 50;
-            transform: scale(1.8) !important;
-            box-shadow: 0 0 0 4px rgba(134, 199, 237, 0.8),
-                        0 25px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .floating-item.featured img {
-            object-fit: contain;
-            background: rgba(24, 45, 83, 0.95);
-        }
-
-        /* Dimmed state for non-featured items */
-        .floating-wall.has-featured .floating-item:not(.featured) {
-            opacity: 0.4;
-            filter: blur(1px);
         }
 
         .palooza-label {
@@ -784,11 +855,18 @@
                 </div>
             </div>
 
-            <!-- Palooza hero - Floating/Drifting Wall -->
+            <!-- Palooza hero - Ticker/Marquee + Hero -->
             <div class="stage-hero" id="hero-palooza">
                 <div class="hero-palooza">
-                    <div class="floating-wall" id="floatingWall">
-                        <!-- Filled by JS -->
+                    <div class="ticker-hero-container">
+                        <div class="ticker-hero" id="tickerHero">
+                            <img id="tickerHeroImg" src="" alt="Participant moment">
+                        </div>
+                        <div class="ticker-wrapper">
+                            <div class="ticker-track" id="tickerTrack">
+                                <!-- Filled by JS - duplicated for seamless loop -->
+                            </div>
+                        </div>
                     </div>
                     <div class="palooza-label">Real moments from our Mississippi program — click any to explore</div>
                 </div>
@@ -861,172 +939,82 @@
         ];
 
         let currentLightboxIndex = 0;
-        let floatingItems = [];
-        let floatingAnimationFrame = null;
-        let featureInterval = null;
-        let currentFeaturedIndex = -1;
+        let currentTickerIndex = 0;
+        let tickerInterval = null;
 
-        function generateFloatingWall() {
-            const wall = document.getElementById('floatingWall');
-            if (!wall) return;
+        function generateTickerHero() {
+            const heroImg = document.getElementById('tickerHeroImg');
+            const hero = document.getElementById('tickerHero');
+            const track = document.getElementById('tickerTrack');
 
-            wall.innerHTML = '';
-            floatingItems = [];
+            if (!heroImg || !track) return;
 
-            const wallWidth = wall.offsetWidth;
-            const wallHeight = wall.offsetHeight;
+            // Set initial hero image
+            heroImg.src = galleryImages[0];
 
-            // Create floating items with random positions and velocities
-            galleryImages.forEach((src, i) => {
+            // Generate ticker items (duplicate for seamless loop)
+            track.innerHTML = '';
+            const allImages = [...galleryImages, ...galleryImages]; // Duplicate for seamless scroll
+
+            allImages.forEach((src, i) => {
+                const actualIndex = i % galleryImages.length;
                 const item = document.createElement('div');
-                item.className = 'floating-item';
-
-                // Random size between 80-140px
-                const size = 80 + Math.random() * 60;
-                item.style.width = size + 'px';
-                item.style.height = size + 'px';
-
-                // Random starting position
-                const x = Math.random() * (wallWidth - size);
-                const y = Math.random() * (wallHeight - size);
-                item.style.left = x + 'px';
-                item.style.top = y + 'px';
-
-                // Random z-index for layering
-                item.style.zIndex = Math.floor(Math.random() * 20);
-
-                // Slight random rotation
-                const rotation = -5 + Math.random() * 10;
-                item.style.transform = `rotate(${rotation}deg)`;
+                item.className = 'ticker-item' + (actualIndex === 0 ? ' active' : '');
 
                 const img = document.createElement('img');
                 img.src = src;
-                img.alt = 'Participant moment';
+                img.alt = 'Thumbnail';
                 img.loading = 'lazy';
 
                 item.appendChild(img);
-                item.onclick = (e) => {
-                    if (item.classList.contains('featured')) {
-                        openLightbox(i);
-                    } else {
-                        featureItem(i);
-                    }
-                };
-                wall.appendChild(item);
-
-                // Store item data for animation
-                floatingItems.push({
-                    element: item,
-                    x: x,
-                    y: y,
-                    vx: (Math.random() - 0.5) * 0.3,
-                    vy: (Math.random() - 0.5) * 0.3,
-                    size: size,
-                    baseRotation: rotation,
-                    index: i
-                });
+                item.onclick = () => goToTickerImage(actualIndex);
+                track.appendChild(item);
             });
 
-            // Start animations
-            startFloatingAnimation();
-            startFeatureCycle();
+            // Click hero to open lightbox
+            hero.onclick = () => openLightbox(currentTickerIndex);
+
+            // Start auto-rotation
+            startTickerRotation();
         }
 
-        function startFloatingAnimation() {
-            const wall = document.getElementById('floatingWall');
-            if (!wall) return;
+        function goToTickerImage(index) {
+            const heroImg = document.getElementById('tickerHeroImg');
+            const items = document.querySelectorAll('.ticker-item');
 
-            const wallWidth = wall.offsetWidth;
-            const wallHeight = wall.offsetHeight;
+            // Fade out
+            heroImg.classList.add('fade-out');
 
-            function animate() {
-                floatingItems.forEach(item => {
-                    // Skip featured item
-                    if (item.element.classList.contains('featured')) return;
+            setTimeout(() => {
+                currentTickerIndex = index;
+                heroImg.src = galleryImages[index];
+                heroImg.classList.remove('fade-out');
 
-                    // Update position
-                    item.x += item.vx;
-                    item.y += item.vy;
-
-                    // Bounce off walls
-                    if (item.x <= 0 || item.x >= wallWidth - item.size) {
-                        item.vx *= -1;
-                        item.x = Math.max(0, Math.min(item.x, wallWidth - item.size));
-                    }
-                    if (item.y <= 0 || item.y >= wallHeight - item.size) {
-                        item.vy *= -1;
-                        item.y = Math.max(0, Math.min(item.y, wallHeight - item.size));
-                    }
-
-                    // Apply position
-                    item.element.style.left = item.x + 'px';
-                    item.element.style.top = item.y + 'px';
+                // Update active state on ticker items
+                items.forEach((item, i) => {
+                    const actualIndex = i % galleryImages.length;
+                    item.classList.toggle('active', actualIndex === index);
                 });
+            }, 200);
 
-                floatingAnimationFrame = requestAnimationFrame(animate);
-            }
-
-            animate();
+            // Reset rotation timer
+            startTickerRotation();
         }
 
-        function stopFloatingAnimation() {
-            if (floatingAnimationFrame) {
-                cancelAnimationFrame(floatingAnimationFrame);
-                floatingAnimationFrame = null;
-            }
+        function nextTickerImage() {
+            const nextIndex = (currentTickerIndex + 1) % galleryImages.length;
+            goToTickerImage(nextIndex);
         }
 
-        function featureItem(index) {
-            const wall = document.getElementById('floatingWall');
-            if (!wall) return;
-
-            // Remove previous featured
-            floatingItems.forEach(item => {
-                item.element.classList.remove('featured');
-            });
-
-            if (index === currentFeaturedIndex) {
-                // Unfeature if clicking same one
-                wall.classList.remove('has-featured');
-                currentFeaturedIndex = -1;
-                return;
-            }
-
-            // Feature new item
-            const item = floatingItems[index];
-            if (item) {
-                item.element.classList.add('featured');
-                wall.classList.add('has-featured');
-                currentFeaturedIndex = index;
-
-                // Center the featured item
-                const wallWidth = wall.offsetWidth;
-                const wallHeight = wall.offsetHeight;
-                const featuredSize = item.size * 1.8;
-                item.x = (wallWidth - featuredSize) / 2;
-                item.y = (wallHeight - featuredSize) / 2;
-                item.element.style.left = item.x + 'px';
-                item.element.style.top = item.y + 'px';
-            }
-
-            // Reset feature cycle
-            startFeatureCycle();
+        function startTickerRotation() {
+            if (tickerInterval) clearInterval(tickerInterval);
+            tickerInterval = setInterval(nextTickerImage, 4000);
         }
 
-        function startFeatureCycle() {
-            if (featureInterval) clearInterval(featureInterval);
-
-            featureInterval = setInterval(() => {
-                // Pick a random item to feature
-                const randomIndex = Math.floor(Math.random() * galleryImages.length);
-                featureItem(randomIndex);
-            }, 5000);
-        }
-
-        function stopFeatureCycle() {
-            if (featureInterval) {
-                clearInterval(featureInterval);
-                featureInterval = null;
+        function stopTickerRotation() {
+            if (tickerInterval) {
+                clearInterval(tickerInterval);
+                tickerInterval = null;
             }
         }
 
@@ -1365,7 +1353,7 @@
 
         // Initialize
         window.addEventListener('load', () => {
-            generateFloatingWall();
+            generateTickerHero();
             setTimeout(() => updateStage(0, false), 100);
         });
 
