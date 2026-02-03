@@ -28,6 +28,8 @@
         body.stage-2 { background: linear-gradient(135deg, #182d53 0%, #2a4a7a 100%); color: #fff; }
         body.stage-3 { background: linear-gradient(135deg, #f0f8ff 0%, #d4ecf9 100%); }
         body.stage-4 { background: linear-gradient(135deg, #86c7ed 0%, #5fb3e0 50%, #182d53 100%); color: #fff; }
+        body.stage-5 { background: linear-gradient(135deg, #182d53 0%, #3d5a80 100%); color: #fff; }
+        body.stage-6 { background: linear-gradient(135deg, #2a9d8f 0%, #264653 100%); color: #fff; }
 
         .container {
             max-width: 1100px;
@@ -54,7 +56,9 @@
         }
 
         body.stage-2 h1,
-        body.stage-4 h1 { color: #fff; }
+        body.stage-4 h1,
+        body.stage-5 h1,
+        body.stage-6 h1 { color: #fff; }
 
         .subtitle {
             font-size: 1.05rem;
@@ -294,7 +298,9 @@
         }
 
         body.stage-2 .marker-label,
-        body.stage-4 .marker-label {
+        body.stage-4 .marker-label,
+        body.stage-5 .marker-label,
+        body.stage-6 .marker-label {
             color: #fff;
         }
 
@@ -328,7 +334,9 @@
         }
 
         body.stage-2 .info-panel,
-        body.stage-4 .info-panel {
+        body.stage-4 .info-panel,
+        body.stage-5 .info-panel,
+        body.stage-6 .info-panel {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -358,7 +366,9 @@
         }
 
         body.stage-2 .panel-title,
-        body.stage-4 .panel-title {
+        body.stage-4 .panel-title,
+        body.stage-5 .panel-title,
+        body.stage-6 .panel-title {
             color: #fff;
         }
 
@@ -370,7 +380,9 @@
         }
 
         body.stage-2 .panel-description,
-        body.stage-4 .panel-description {
+        body.stage-4 .panel-description,
+        body.stage-5 .panel-description,
+        body.stage-6 .panel-description {
             color: rgba(255,255,255,0.9);
         }
 
@@ -487,7 +499,9 @@
         }
 
         body.stage-2 .deep-dive-card,
-        body.stage-4 .deep-dive-card {
+        body.stage-4 .deep-dive-card,
+        body.stage-5 .deep-dive-card,
+        body.stage-6 .deep-dive-card {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
@@ -503,7 +517,9 @@
         }
 
         body.stage-2 .deep-dive-card.expanded,
-        body.stage-4 .deep-dive-card.expanded {
+        body.stage-4 .deep-dive-card.expanded,
+        body.stage-5 .deep-dive-card.expanded,
+        body.stage-6 .deep-dive-card.expanded {
             background: rgba(255, 255, 255, 0.15);
         }
 
@@ -522,7 +538,9 @@
         }
 
         body.stage-2 .deep-dive-title,
-        body.stage-4 .deep-dive-title {
+        body.stage-4 .deep-dive-title,
+        body.stage-5 .deep-dive-title,
+        body.stage-6 .deep-dive-title {
             color: #fff;
         }
 
@@ -571,7 +589,9 @@
         }
 
         body.stage-2 .deep-dive-content-inner,
-        body.stage-4 .deep-dive-content-inner {
+        body.stage-4 .deep-dive-content-inner,
+        body.stage-5 .deep-dive-content-inner,
+        body.stage-6 .deep-dive-content-inner {
             color: #fff;
         }
 
@@ -598,7 +618,9 @@
         }
 
         body.stage-2 .card-stat-value,
-        body.stage-4 .card-stat-value {
+        body.stage-4 .card-stat-value,
+        body.stage-5 .card-stat-value,
+        body.stage-6 .card-stat-value {
             color: #fff;
         }
 
@@ -673,7 +695,9 @@
         }
 
         body.stage-2 .stat-value,
-        body.stage-4 .stat-value {
+        body.stage-4 .stat-value,
+        body.stage-5 .stat-value,
+        body.stage-6 .stat-value {
             color: #fff;
         }
 
@@ -739,6 +763,14 @@
                 <div class="stage-marker" data-stage="4">
                     <div class="marker-dot">🎉</div>
                     <div class="marker-label">Palooza</div>
+                </div>
+                <div class="stage-marker" data-stage="5">
+                    <div class="marker-dot">🗳️</div>
+                    <div class="marker-label">E-Day</div>
+                </div>
+                <div class="stage-marker" data-stage="6">
+                    <div class="marker-dot">💰</div>
+                    <div class="marker-label">Paid</div>
                 </div>
             </div>
 
@@ -1046,6 +1078,43 @@
                                 <div class="card-stat-value">84%</div>
                                 <div class="card-stat-label">of contacts voted early or made a vote plan</div>
                             </div>
+                        `
+                    }
+                ]
+            },
+            {
+                icon: '🗳️',
+                title: 'Election Day Palooza',
+                description: 'For participants who want to do more, we offer an optional Election Day Palooza — a final push to make sure their contacts actually vote. They check in with friends and family, help solve last-minute problems, and celebrate together as results come in.',
+                heroId: null,
+                deepDives: [
+                    {
+                        label: 'The final push (2024)',
+                        preview: 'Last-minute outreach on Election Day',
+                        content: `
+                            <p>Election Day Paloozas give participants one more chance to make sure their contacts follow through on their vote plans.</p>
+                            <p>• Check if contacts have voted<br>
+                            • Help solve last-minute issues (rides, ID, polling locations)<br>
+                            • Celebrate together as a community</p>
+                        `
+                    }
+                ]
+            },
+            {
+                icon: '💰',
+                title: 'Getting Compensated',
+                description: 'After completing the program, participants receive their compensation via direct deposit or prepaid card. We pay for the work they do — because relational organizing is real work that deserves real pay.',
+                heroId: null,
+                deepDives: [
+                    {
+                        label: 'How compensation works (2024)',
+                        preview: 'Paid for completed work',
+                        content: `
+                            <p>Participants are compensated based on program completion:</p>
+                            <p>• Base payment for completing onboarding and Palooza<br>
+                            • Bonuses for referrals who complete the program<br>
+                            • Payment via direct deposit or prepaid card</p>
+                            <p>We believe relational organizing is valuable work — and we pay accordingly.</p>
                         `
                     }
                 ]
