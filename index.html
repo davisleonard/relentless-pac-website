@@ -142,113 +142,62 @@
             border-radius: 16px;
         }
 
-        /* Palooza hero - Spotlight Carousel */
+        /* Palooza hero - Floating/Drifting Wall */
         .hero-palooza {
             max-width: 100%;
             overflow: hidden;
             position: relative;
         }
 
-        .spotlight-carousel {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* Main featured image */
-        .spotlight-main {
+        .floating-wall {
             position: relative;
             width: 100%;
-            max-width: 500px;
-            aspect-ratio: 4/3;
-            border-radius: 16px;
+            height: 400px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            cursor: pointer;
         }
 
-        .spotlight-main::before {
-            content: '';
+        .floating-item {
             position: absolute;
-            inset: -3px;
-            background: linear-gradient(135deg, #86c7ed, #fff, #86c7ed);
-            border-radius: 19px;
-            z-index: -1;
-            animation: spotlightGlow 2s ease-in-out infinite;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.6s ease,
+                        z-index 0s;
+            will-change: transform;
         }
 
-        @keyframes spotlightGlow {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .spotlight-main img {
+        .floating-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 16px;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: block;
         }
 
-        .spotlight-main img.fade-out {
-            opacity: 0;
-            transform: scale(1.05);
+        .floating-item:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            z-index: 100 !important;
         }
 
-        /* Thumbnail strip */
-        .spotlight-thumbnails {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 100%;
-            padding: 0 10px;
+        /* Featured/spotlight state */
+        .floating-item.featured {
+            z-index: 50;
+            transform: scale(1.8) !important;
+            box-shadow: 0 0 0 4px rgba(134, 199, 237, 0.8),
+                        0 25px 60px rgba(0, 0, 0, 0.5);
         }
 
-        .spotlight-thumb {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            opacity: 0.5;
-            transform: scale(0.9);
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        .floating-item.featured img {
+            object-fit: contain;
+            background: rgba(24, 45, 83, 0.95);
         }
 
-        .spotlight-thumb:hover {
-            opacity: 0.8;
-            transform: scale(1);
-        }
-
-        .spotlight-thumb.active {
-            opacity: 1;
-            transform: scale(1.1);
-            box-shadow: 0 0 0 3px #86c7ed, 0 4px 20px rgba(134, 199, 237, 0.5);
-        }
-
-        .spotlight-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Progress bar under main image */
-        .spotlight-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #86c7ed, #fff);
-            border-radius: 0 0 16px 16px;
-            animation: progressFill 4s linear infinite;
-        }
-
-        @keyframes progressFill {
-            from { width: 0%; }
-            to { width: 100%; }
+        /* Dimmed state for non-featured items */
+        .floating-wall.has-featured .floating-item:not(.featured) {
+            opacity: 0.4;
+            filter: blur(1px);
         }
 
         .palooza-label {
@@ -835,17 +784,11 @@
                 </div>
             </div>
 
-            <!-- Palooza hero - Spotlight Carousel -->
+            <!-- Palooza hero - Floating/Drifting Wall -->
             <div class="stage-hero" id="hero-palooza">
                 <div class="hero-palooza">
-                    <div class="spotlight-carousel">
-                        <div class="spotlight-main" id="spotlightMain">
-                            <img id="spotlightImg" src="" alt="Participant message">
-                            <div class="spotlight-progress" id="spotlightProgress"></div>
-                        </div>
-                        <div class="spotlight-thumbnails" id="spotlightThumbs">
-                            <!-- Filled by JS -->
-                        </div>
+                    <div class="floating-wall" id="floatingWall">
+                        <!-- Filled by JS -->
                     </div>
                     <div class="palooza-label">Real moments from our Mississippi program — click any to explore</div>
                 </div>
@@ -918,86 +861,172 @@
         ];
 
         let currentLightboxIndex = 0;
-        let currentSpotlightIndex = 0;
-        let spotlightInterval = null;
+        let floatingItems = [];
+        let floatingAnimationFrame = null;
+        let featureInterval = null;
+        let currentFeaturedIndex = -1;
 
-        function generateSpotlightCarousel() {
-            const mainImg = document.getElementById('spotlightImg');
-            const thumbsContainer = document.getElementById('spotlightThumbs');
-            const mainContainer = document.getElementById('spotlightMain');
+        function generateFloatingWall() {
+            const wall = document.getElementById('floatingWall');
+            if (!wall) return;
 
-            if (!mainImg || !thumbsContainer) return;
+            wall.innerHTML = '';
+            floatingItems = [];
 
-            // Set initial main image
-            mainImg.src = galleryImages[0];
+            const wallWidth = wall.offsetWidth;
+            const wallHeight = wall.offsetHeight;
 
-            // Generate thumbnails
-            thumbsContainer.innerHTML = '';
+            // Create floating items with random positions and velocities
             galleryImages.forEach((src, i) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'spotlight-thumb' + (i === 0 ? ' active' : '');
+                const item = document.createElement('div');
+                item.className = 'floating-item';
+
+                // Random size between 80-140px
+                const size = 80 + Math.random() * 60;
+                item.style.width = size + 'px';
+                item.style.height = size + 'px';
+
+                // Random starting position
+                const x = Math.random() * (wallWidth - size);
+                const y = Math.random() * (wallHeight - size);
+                item.style.left = x + 'px';
+                item.style.top = y + 'px';
+
+                // Random z-index for layering
+                item.style.zIndex = Math.floor(Math.random() * 20);
+
+                // Slight random rotation
+                const rotation = -5 + Math.random() * 10;
+                item.style.transform = `rotate(${rotation}deg)`;
 
                 const img = document.createElement('img');
                 img.src = src;
-                img.alt = 'Thumbnail';
+                img.alt = 'Participant moment';
                 img.loading = 'lazy';
 
-                thumb.appendChild(img);
-                thumb.onclick = () => goToSpotlight(i);
-                thumbsContainer.appendChild(thumb);
+                item.appendChild(img);
+                item.onclick = (e) => {
+                    if (item.classList.contains('featured')) {
+                        openLightbox(i);
+                    } else {
+                        featureItem(i);
+                    }
+                };
+                wall.appendChild(item);
+
+                // Store item data for animation
+                floatingItems.push({
+                    element: item,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: size,
+                    baseRotation: rotation,
+                    index: i
+                });
             });
 
-            // Click main image to open lightbox
-            mainContainer.onclick = () => openLightbox(currentSpotlightIndex);
-
-            // Start auto-rotation
-            startSpotlightRotation();
+            // Start animations
+            startFloatingAnimation();
+            startFeatureCycle();
         }
 
-        function goToSpotlight(index) {
-            const mainImg = document.getElementById('spotlightImg');
-            const thumbs = document.querySelectorAll('.spotlight-thumb');
-            const progress = document.getElementById('spotlightProgress');
+        function startFloatingAnimation() {
+            const wall = document.getElementById('floatingWall');
+            if (!wall) return;
 
-            // Fade out current
-            mainImg.classList.add('fade-out');
+            const wallWidth = wall.offsetWidth;
+            const wallHeight = wall.offsetHeight;
 
-            setTimeout(() => {
-                currentSpotlightIndex = index;
-                mainImg.src = galleryImages[index];
-                mainImg.classList.remove('fade-out');
+            function animate() {
+                floatingItems.forEach(item => {
+                    // Skip featured item
+                    if (item.element.classList.contains('featured')) return;
 
-                // Update active thumb
-                thumbs.forEach((t, i) => {
-                    t.classList.toggle('active', i === index);
+                    // Update position
+                    item.x += item.vx;
+                    item.y += item.vy;
+
+                    // Bounce off walls
+                    if (item.x <= 0 || item.x >= wallWidth - item.size) {
+                        item.vx *= -1;
+                        item.x = Math.max(0, Math.min(item.x, wallWidth - item.size));
+                    }
+                    if (item.y <= 0 || item.y >= wallHeight - item.size) {
+                        item.vy *= -1;
+                        item.y = Math.max(0, Math.min(item.y, wallHeight - item.size));
+                    }
+
+                    // Apply position
+                    item.element.style.left = item.x + 'px';
+                    item.element.style.top = item.y + 'px';
                 });
 
-                // Reset progress bar
-                if (progress) {
-                    progress.style.animation = 'none';
-                    progress.offsetHeight; // Trigger reflow
-                    progress.style.animation = 'progressFill 4s linear infinite';
-                }
-            }, 250);
+                floatingAnimationFrame = requestAnimationFrame(animate);
+            }
 
-            // Restart rotation timer
-            startSpotlightRotation();
+            animate();
         }
 
-        function nextSpotlight() {
-            const nextIndex = (currentSpotlightIndex + 1) % galleryImages.length;
-            goToSpotlight(nextIndex);
+        function stopFloatingAnimation() {
+            if (floatingAnimationFrame) {
+                cancelAnimationFrame(floatingAnimationFrame);
+                floatingAnimationFrame = null;
+            }
         }
 
-        function startSpotlightRotation() {
-            if (spotlightInterval) clearInterval(spotlightInterval);
-            spotlightInterval = setInterval(nextSpotlight, 4000);
+        function featureItem(index) {
+            const wall = document.getElementById('floatingWall');
+            if (!wall) return;
+
+            // Remove previous featured
+            floatingItems.forEach(item => {
+                item.element.classList.remove('featured');
+            });
+
+            if (index === currentFeaturedIndex) {
+                // Unfeature if clicking same one
+                wall.classList.remove('has-featured');
+                currentFeaturedIndex = -1;
+                return;
+            }
+
+            // Feature new item
+            const item = floatingItems[index];
+            if (item) {
+                item.element.classList.add('featured');
+                wall.classList.add('has-featured');
+                currentFeaturedIndex = index;
+
+                // Center the featured item
+                const wallWidth = wall.offsetWidth;
+                const wallHeight = wall.offsetHeight;
+                const featuredSize = item.size * 1.8;
+                item.x = (wallWidth - featuredSize) / 2;
+                item.y = (wallHeight - featuredSize) / 2;
+                item.element.style.left = item.x + 'px';
+                item.element.style.top = item.y + 'px';
+            }
+
+            // Reset feature cycle
+            startFeatureCycle();
         }
 
-        function stopSpotlightRotation() {
-            if (spotlightInterval) {
-                clearInterval(spotlightInterval);
-                spotlightInterval = null;
+        function startFeatureCycle() {
+            if (featureInterval) clearInterval(featureInterval);
+
+            featureInterval = setInterval(() => {
+                // Pick a random item to feature
+                const randomIndex = Math.floor(Math.random() * galleryImages.length);
+                featureItem(randomIndex);
+            }, 5000);
+        }
+
+        function stopFeatureCycle() {
+            if (featureInterval) {
+                clearInterval(featureInterval);
+                featureInterval = null;
             }
         }
 
@@ -1336,7 +1365,7 @@
 
         // Initialize
         window.addEventListener('load', () => {
-            generateSpotlightCarousel();
+            generateFloatingWall();
             setTimeout(() => updateStage(0, false), 100);
         });
 
