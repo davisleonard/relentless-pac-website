@@ -22,14 +22,11 @@
             transition: background 0.6s ease;
         }
 
-        /* Dynamic backgrounds per stage */
+        /* Dynamic backgrounds per stage - now only 4 stages */
         body.stage-0 { background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%); }
         body.stage-1 { background: linear-gradient(135deg, #f8fbfd 0%, #e8f4fb 100%); }
         body.stage-2 { background: linear-gradient(135deg, #182d53 0%, #2a4a7a 100%); color: #fff; }
         body.stage-3 { background: linear-gradient(135deg, #f0f8ff 0%, #d4ecf9 100%); }
-        body.stage-4 { background: linear-gradient(135deg, #86c7ed 0%, #5fb3e0 50%, #182d53 100%); color: #fff; }
-        body.stage-5 { background: linear-gradient(135deg, #182d53 0%, #3d5a80 100%); color: #fff; }
-        body.stage-6 { background: linear-gradient(135deg, #2a9d8f 0%, #264653 100%); color: #fff; }
 
         .container {
             max-width: 1100px;
@@ -55,10 +52,7 @@
             transition: color 0.5s ease;
         }
 
-        body.stage-2 h1,
-        body.stage-4 h1,
-        body.stage-5 h1,
-        body.stage-6 h1 { color: #fff; }
+        body.stage-2 h1 { color: #fff; }
 
         .subtitle {
             font-size: 1.05rem;
@@ -88,10 +82,97 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Onboarding hero - cinematic video */
-        .hero-video-wrapper {
+        /* Pie Chart for Recruitment */
+        .hero-pie-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .hero-pie-label {
+            text-align: center;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #7a8fa6;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .pie-chart-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #86c7ed 0deg 132.5deg,      /* 36.8% Referrals */
+                #5fb3e0 132.5deg 241.6deg,  /* 30.3% SMS */
+                #182d53 241.6deg 331.6deg,  /* 25% Digital Ads */
+                #3d5a80 331.6deg 357.5deg,  /* 7.2% Partnerships */
+                #7a8fa6 357.5deg 360deg     /* 0.7% Other */
+            );
+            box-shadow: 0 8px 30px rgba(24, 45, 83, 0.15);
+            position: relative;
+        }
+
+        .pie-chart::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .pie-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .legend-color.referrals { background: #86c7ed; }
+        .legend-color.sms { background: #5fb3e0; }
+        .legend-color.digital { background: #182d53; }
+        .legend-color.partnerships { background: #3d5a80; }
+        .legend-color.other { background: #7a8fa6; }
+
+        .legend-value {
+            font-weight: 700;
+            min-width: 45px;
+        }
+
+        /* Events hero - video + screenshots */
+        .hero-events-wrapper {
             max-width: 100%;
             margin: 0 auto;
+        }
+
+        .hero-video-wrapper {
+            max-width: 100%;
+            margin: 0 auto 24px;
             position: relative;
         }
 
@@ -117,40 +198,12 @@
             border-radius: 16px;
         }
 
-        /* Resources hero - GIF showcase */
-        .hero-gif-wrapper {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .hero-gif-label {
-            text-align: center;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #7a8fa6;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .hero-gif {
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(24, 45, 83, 0.15);
-            background: #fff;
-        }
-
-        .hero-gif img {
-            width: 100%;
-            display: block;
-            border-radius: 16px;
-        }
-
-        /* Palooza hero - screenshot wall */
+        /* Screenshot wall for Events */
         .hero-palooza {
             max-width: 100%;
             overflow: hidden;
             position: relative;
+            margin-top: 24px;
         }
 
         .screenshot-explosion {
@@ -202,6 +255,35 @@
             font-size: 0.9rem;
             color: rgba(255,255,255,0.9);
             font-weight: 500;
+        }
+
+        /* Talk to Friends hero - GIF */
+        .hero-gif-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .hero-gif-label {
+            text-align: center;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #7a8fa6;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .hero-gif {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(24, 45, 83, 0.15);
+            background: #fff;
+        }
+
+        .hero-gif img {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
         }
 
         /* Journey track */
@@ -297,10 +379,7 @@
             opacity: 1;
         }
 
-        body.stage-2 .marker-label,
-        body.stage-4 .marker-label,
-        body.stage-5 .marker-label,
-        body.stage-6 .marker-label {
+        body.stage-2 .marker-label {
             color: #fff;
         }
 
@@ -333,10 +412,7 @@
             transition: all 0.5s ease;
         }
 
-        body.stage-2 .info-panel,
-        body.stage-4 .info-panel,
-        body.stage-5 .info-panel,
-        body.stage-6 .info-panel {
+        body.stage-2 .info-panel {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -365,10 +441,7 @@
             letter-spacing: 1px;
         }
 
-        body.stage-2 .panel-title,
-        body.stage-4 .panel-title,
-        body.stage-5 .panel-title,
-        body.stage-6 .panel-title {
+        body.stage-2 .panel-title {
             color: #fff;
         }
 
@@ -379,10 +452,7 @@
             opacity: 0.9;
         }
 
-        body.stage-2 .panel-description,
-        body.stage-4 .panel-description,
-        body.stage-5 .panel-description,
-        body.stage-6 .panel-description {
+        body.stage-2 .panel-description {
             color: rgba(255,255,255,0.9);
         }
 
@@ -498,10 +568,7 @@
             transition: all 0.3s ease;
         }
 
-        body.stage-2 .deep-dive-card,
-        body.stage-4 .deep-dive-card,
-        body.stage-5 .deep-dive-card,
-        body.stage-6 .deep-dive-card {
+        body.stage-2 .deep-dive-card {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
@@ -516,10 +583,7 @@
             box-shadow: 0 8px 30px rgba(134, 199, 237, 0.2);
         }
 
-        body.stage-2 .deep-dive-card.expanded,
-        body.stage-4 .deep-dive-card.expanded,
-        body.stage-5 .deep-dive-card.expanded,
-        body.stage-6 .deep-dive-card.expanded {
+        body.stage-2 .deep-dive-card.expanded {
             background: rgba(255, 255, 255, 0.15);
         }
 
@@ -537,10 +601,7 @@
             font-weight: 700;
         }
 
-        body.stage-2 .deep-dive-title,
-        body.stage-4 .deep-dive-title,
-        body.stage-5 .deep-dive-title,
-        body.stage-6 .deep-dive-title {
+        body.stage-2 .deep-dive-title {
             color: #fff;
         }
 
@@ -588,10 +649,7 @@
             opacity: 0.85;
         }
 
-        body.stage-2 .deep-dive-content-inner,
-        body.stage-4 .deep-dive-content-inner,
-        body.stage-5 .deep-dive-content-inner,
-        body.stage-6 .deep-dive-content-inner {
+        body.stage-2 .deep-dive-content-inner {
             color: #fff;
         }
 
@@ -617,16 +675,50 @@
             white-space: nowrap;
         }
 
-        body.stage-2 .card-stat-value,
-        body.stage-4 .card-stat-value,
-        body.stage-5 .card-stat-value,
-        body.stage-6 .card-stat-value {
+        body.stage-2 .card-stat-value {
             color: #fff;
         }
 
         .card-stat-label {
             font-size: 0.85rem;
             opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        /* Flow steps for Talk to Friends */
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: rgba(134, 199, 237, 0.1);
+            border-radius: 12px;
+            border-left: 3px solid #86c7ed;
+        }
+
+        .flow-step-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #86c7ed, #5fb3e0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #182d53;
+            flex-shrink: 0;
+        }
+
+        .flow-step-text {
+            font-size: 0.95rem;
             line-height: 1.4;
         }
 
@@ -694,10 +786,7 @@
             color: #182d53;
         }
 
-        body.stage-2 .stat-value,
-        body.stage-4 .stat-value,
-        body.stage-5 .stat-value,
-        body.stage-6 .stat-value {
+        body.stage-2 .stat-value {
             color: #fff;
         }
 
@@ -710,10 +799,128 @@
             font-weight: 600;
         }
 
+        /* Learn More Section */
+        .learn-more-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .learn-more-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .learn-more-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #182d53;
+            margin-bottom: 8px;
+        }
+
+        .learn-more-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        .learn-more-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .learn-more-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(134, 199, 237, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .learn-more-card:hover {
+            border-color: #86c7ed;
+        }
+
+        .learn-more-card.expanded {
+            background: #fff;
+            border-color: #86c7ed;
+            box-shadow: 0 8px 30px rgba(134, 199, 237, 0.15);
+        }
+
+        .learn-more-card-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .learn-more-card-icon {
+            font-size: 1.8rem;
+            margin-right: 16px;
+        }
+
+        .learn-more-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #182d53;
+        }
+
+        .learn-more-card-preview {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        .learn-more-card.expanded .learn-more-card-preview {
+            display: none;
+        }
+
+        .learn-more-card-toggle {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            font-size: 1.4rem;
+        }
+
+        .learn-more-card.expanded .learn-more-card-toggle {
+            transform: rotate(180deg);
+            opacity: 1;
+            color: #86c7ed;
+        }
+
+        .learn-more-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .learn-more-card.expanded .learn-more-card-content {
+            max-height: 500px;
+            padding: 0 24px 24px;
+        }
+
+        .learn-more-card-content-inner {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: #182d53;
+        }
+
+        .learn-more-card-content-inner p {
+            margin-bottom: 12px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .hero-resources {
-                grid-template-columns: 1fr;
+            .pie-chart-container {
+                flex-direction: column;
             }
             .screenshot-item {
                 width: 100px;
@@ -746,75 +953,98 @@
             <div class="stage-markers">
                 <div class="stage-marker active" data-stage="0">
                     <div class="marker-dot">👋</div>
-                    <div class="marker-label">Recruited</div>
+                    <div class="marker-label">Recruitment</div>
                 </div>
                 <div class="stage-marker" data-stage="1">
                     <div class="marker-dot">📝</div>
-                    <div class="marker-label">Apply</div>
+                    <div class="marker-label">Application</div>
                 </div>
                 <div class="stage-marker" data-stage="2">
-                    <div class="marker-dot">🚀</div>
-                    <div class="marker-label">Onboarding</div>
+                    <div class="marker-dot">🎉</div>
+                    <div class="marker-label">Events</div>
                 </div>
                 <div class="stage-marker" data-stage="3">
-                    <div class="marker-dot">📚</div>
-                    <div class="marker-label">Resources</div>
-                </div>
-                <div class="stage-marker" data-stage="4">
-                    <div class="marker-dot">🎉</div>
-                    <div class="marker-label">Palooza</div>
-                </div>
-                <div class="stage-marker" data-stage="5">
-                    <div class="marker-dot">🗳️</div>
-                    <div class="marker-label">E-Day</div>
-                </div>
-                <div class="stage-marker" data-stage="6">
-                    <div class="marker-dot">💰</div>
-                    <div class="marker-label">Paid</div>
+                    <div class="marker-dot">💬</div>
+                    <div class="marker-label">Talk to Friends</div>
                 </div>
             </div>
 
             <div class="journey-dot" id="journeyDot"></div>
         </div>
 
-        <!-- Stage-specific hero sections - integrated above info panel -->
+        <!-- Stage-specific hero sections -->
         <div class="hero-container">
-            <!-- Onboarding hero - cinematic video -->
-            <div class="stage-hero" id="hero-onboarding">
-                <div class="hero-video-wrapper">
-                    <div class="hero-video-label">Watch: What's at Stake (PA 2025)</div>
-                    <div class="hero-video">
-                        <iframe
-                            width="100%"
-                            height="506"
-                            src="https://www.youtube.com/embed/Yq3KO8hCWcA"
-                            title="What's at Stake - PA 2025"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            style="border-radius: 20px;">
-                        </iframe>
+            <!-- Recruitment hero - Pie chart -->
+            <div class="stage-hero" id="hero-recruitment">
+                <div class="hero-pie-wrapper">
+                    <div class="hero-pie-label">2024 Recruitment Channels</div>
+                    <div class="pie-chart-container">
+                        <div class="pie-chart"></div>
+                        <div class="pie-legend">
+                            <div class="legend-item">
+                                <div class="legend-color referrals"></div>
+                                <span class="legend-value">36.8%</span>
+                                <span>Referrals</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color sms"></div>
+                                <span class="legend-value">30.3%</span>
+                                <span>SMS</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color digital"></div>
+                                <span class="legend-value">25.0%</span>
+                                <span>Digital Ads</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color partnerships"></div>
+                                <span class="legend-value">7.2%</span>
+                                <span>Partnerships</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color other"></div>
+                                <span class="legend-value">0.7%</span>
+                                <span>Other</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Resources hero - GIF showcase -->
-            <div class="stage-hero" id="hero-resources">
+            <!-- Events hero - Video + Screenshots -->
+            <div class="stage-hero" id="hero-events">
+                <div class="hero-events-wrapper">
+                    <div class="hero-video-wrapper">
+                        <div class="hero-video-label">Watch: What's at Stake (PA 2025)</div>
+                        <div class="hero-video">
+                            <iframe
+                                width="100%"
+                                height="506"
+                                src="https://www.youtube.com/embed/Yq3KO8hCWcA"
+                                title="What's at Stake - PA 2025"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                style="border-radius: 20px;">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="hero-palooza">
+                        <div class="screenshot-explosion" id="screenshotWall">
+                            <!-- Filled by JS -->
+                        </div>
+                        <div class="palooza-label">Real moments from our program — click any to explore</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Talk to Friends hero - GIF -->
+            <div class="stage-hero" id="hero-talk">
                 <div class="hero-gif-wrapper">
-                    <div class="hero-gif-label">2024 Resource Hub</div>
+                    <div class="hero-gif-label">Rally Platform Demo</div>
                     <div class="hero-gif">
                         <img src="Rally Gifs resource.gif" alt="Rally platform demonstration">
                     </div>
-                </div>
-            </div>
-
-            <!-- Palooza hero - screenshot explosion -->
-            <div class="stage-hero" id="hero-palooza">
-                <div class="hero-palooza">
-                    <div class="screenshot-explosion" id="screenshotWall">
-                        <!-- Filled by JS -->
-                    </div>
-                    <div class="palooza-label">Real moments from our Mississippi program — click any to explore</div>
                 </div>
             </div>
         </div>
@@ -841,6 +1071,87 @@
             <div class="stat">
                 <div class="stat-value">1,014,902</div>
                 <div class="stat-label">Voters Reached</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learn More Section -->
+    <div class="learn-more-section">
+        <div class="learn-more-header">
+            <h2 class="learn-more-title">Learn More</h2>
+            <p class="learn-more-subtitle">Dive deeper into how we run the program</p>
+        </div>
+        <div class="learn-more-cards">
+            <div class="learn-more-card" id="card-staffing">
+                <div class="learn-more-card-header">
+                    <div style="display: flex; align-items: center;">
+                        <span class="learn-more-card-icon">👥</span>
+                        <div>
+                            <div class="learn-more-card-title">Staffing</div>
+                            <div class="learn-more-card-preview">90 event leads, recruited from the performing arts</div>
+                        </div>
+                    </div>
+                    <div class="learn-more-card-toggle">▾</div>
+                </div>
+                <div class="learn-more-card-content">
+                    <div class="learn-more-card-content-inner">
+                        <p>In 2024, we hired 90 non-traditional organizers as part-time event leads — primarily from the performing arts community.</p>
+                        <p>Performers bring energy through a Zoom screen, handle last-minute changes, and connect authentically with participants. We recruited from Playbill.com and similar platforms.</p>
+                        <div class="card-stat">
+                            <div class="card-stat-value">1,329</div>
+                            <div class="card-stat-label">total events run across 5 states in 2024</div>
+                        </div>
+                        <div class="card-stat">
+                            <div class="card-stat-value">87,792</div>
+                            <div class="card-stat-label">individual event attendances</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learn-more-card" id="card-chase">
+                <div class="learn-more-card-header">
+                    <div style="display: flex; align-items: center;">
+                        <span class="learn-more-card-icon">📚</span>
+                        <div>
+                            <div class="learn-more-card-title">Chase & Resources</div>
+                            <div class="learn-more-card-preview">Textline support 12 hours/day, state-specific resource hubs</div>
+                        </div>
+                    </div>
+                    <div class="learn-more-card-toggle">▾</div>
+                </div>
+                <div class="learn-more-card-content">
+                    <div class="learn-more-card-content-inner">
+                        <p>Every participant gets access to a resource website tailored to their state with voting information, deadlines, digital materials to share, and tips for tough conversations.</p>
+                        <div class="card-stat">
+                            <div class="card-stat-value">50,000+</div>
+                            <div class="card-stat-label">unique visitors to the resource site in 2024</div>
+                        </div>
+                        <p>Our Support team handles texts and emails from 11am-11pm ET every day. They answer questions about Rally, voting, and the program. They cheer people on. And yes — they've called secretaries of state on behalf of participants who needed help.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learn-more-card" id="card-payment">
+                <div class="learn-more-card-header">
+                    <div style="display: flex; align-items: center;">
+                        <span class="learn-more-card-icon">💰</span>
+                        <div>
+                            <div class="learn-more-card-title">Payment</div>
+                            <div class="learn-more-card-preview">Real pay for real work — direct deposit or prepaid card</div>
+                        </div>
+                    </div>
+                    <div class="learn-more-card-toggle">▾</div>
+                </div>
+                <div class="learn-more-card-content">
+                    <div class="learn-more-card-content-inner">
+                        <p>Participants are compensated based on program completion:</p>
+                        <p>• Base payment for completing onboarding and Palooza<br>
+                        • Bonuses for referrals who complete the program<br>
+                        • Payment via direct deposit or prepaid card</p>
+                        <p><strong>Relational organizing is real work that deserves real pay.</strong></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -908,35 +1219,32 @@
         const stages = [
             {
                 icon: '👋',
-                title: 'Getting Recruited',
+                title: 'Recruitment',
                 description: 'Someone sees our ad, gets a text, hears from a community partner, or — most often — gets invited by a friend who\'s already in the program. They click through to Rally and apply.',
-                heroId: null,
+                heroId: 'hero-recruitment',
                 deepDives: [
                     {
-                        label: 'Recruitment channels (2024)',
-                        preview: '36.8% from referrals, 30.3% from SMS...',
+                        label: 'Referrals create social pressure',
+                        preview: 'Participants only get paid if their referrals complete',
                         content: `
-                            <p>In 2024, we recruited through multiple channels, meeting people where they are:</p>
-                            <div class="card-stat">
-                                <div class="card-stat-value">36.8%</div>
-                                <div class="card-stat-label">came through peer referrals — our most effective method at $25.47 per applicant</div>
-                            </div>
-                            <div class="card-stat">
-                                <div class="card-stat-value">30.3%</div>
-                                <div class="card-stat-label">recruited via SMS (38 million texts sent)</div>
-                            </div>
-                            <p>We also used digital ads (25%), community partnerships (7.2%), and on-the-ground outreach. Referrals worked best in states where we'd run previous programs — the work compounds.</p>
-                        `
-                    },
-                    {
-                        label: 'Why referrals work (2024)',
-                        preview: 'Word of mouth + accountability',
-                        content: `
-                            <p>Referrals function like relational organizing itself — the best marketer for our program is word of mouth from people already participating.</p>
-                            <p>In 2024, we compensated participants for successful referrals. In the final referral round, we required that referrals actually <em>complete</em> the program — which meant participants helped chase their own referrals.</p>
+                            <p>Referral incentives work because they create accountability. Participants get the referral bonus only if <strong>both they AND their referrals complete the program</strong>.</p>
+                            <p>This means participants are motivated to follow up with the people they recruit — not just sign them up and forget about them.</p>
                             <div class="card-stat">
                                 <div class="card-stat-value">28.2%</div>
                                 <div class="card-stat-label">completion rate for fall referrals (vs. 17% for summer) — accountability made the difference</div>
+                            </div>
+                            <p><strong>In 2026:</strong> Participants will have visibility into their referrals' progress through Rally so they can push them to complete.</p>
+                        `
+                    },
+                    {
+                        label: 'Costs decrease in returning states',
+                        preview: 'The infrastructure compounds over time',
+                        content: `
+                            <p>Recruitment costs drop significantly in states where we've run previous programs. Word of mouth spreads, our brand becomes known, and returning participants recruit their networks.</p>
+                            <p>This is the compounding effect: every cycle builds on the last.</p>
+                            <div class="card-stat">
+                                <div class="card-stat-value">$25.47</div>
+                                <div class="card-stat-label">cost per applicant via referrals — our most efficient channel</div>
                             </div>
                         `
                     }
@@ -944,48 +1252,50 @@
             },
             {
                 icon: '📝',
-                title: 'Applying & Getting Accepted',
-                description: 'They fill out an application on Rally — answering questions about why they want to participate. Behind the scenes, we verify them against the voter file, run fraud detection, and assign them to a hiring tier. Then a human reads their free responses before we accept them.',
+                title: 'Application',
+                description: 'Participants apply using a Rally form, selecting their onboarding time at the point of application. Behind the scenes, we verify them against the voter file, run fraud detection, and review their responses.',
                 heroId: null,
                 deepDives: [
                     {
-                        label: 'The vetting process',
-                        preview: 'Voter file matching, fraud detection, human review',
+                        label: 'The vetting pipeline',
+                        preview: 'Voter file → tiering → fraud check → human review',
                         content: `
-                            <p>Every application goes through automated review first:</p>
-                            <p>• Matched to the national voter file (83% auto-match rate in 2024)<br>
-                            • Run through fraud detection<br>
-                            • Assigned to one of 5 hiring tiers based on vote propensity, support scores, location, and answers</p>
-                            <p>Then a team of humans manually reviews each application and reads free responses before accepting.</p>
+                            <p>Every application goes through a multi-step vetting process:</p>
+                            <div class="flow-steps">
+                                <div class="flow-step">
+                                    <div class="flow-step-number">1</div>
+                                    <div class="flow-step-text"><strong>Voter file matching</strong> — Applications matched to the national voter file (83% auto-match rate in 2024)</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">2</div>
+                                    <div class="flow-step-text"><strong>Tiering</strong> — Assigned to hiring tiers based on vote propensity, support scores, and location</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">3</div>
+                                    <div class="flow-step-text"><strong>Fraud matrix</strong> — Run through automated fraud detection</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">4</div>
+                                    <div class="flow-step-text"><strong>Human review</strong> — Free responses manually reviewed before acceptance</div>
+                                </div>
+                            </div>
                             <div class="card-stat">
                                 <div class="card-stat-value">79.4%</div>
                                 <div class="card-stat-label">of applicants were accepted in 2024</div>
                             </div>
                         `
-                    },
-                    {
-                        label: 'Why speed matters (2024)',
-                        preview: '60%+ signed up within 48 hours',
-                        content: `
-                            <p>In 2024, we learned that speed of acceptance was a major driver of conversion. The faster someone was accepted after applying, the more likely they were to complete the program.</p>
-                            <div class="card-stat">
-                                <div class="card-stat-value">>60%</div>
-                                <div class="card-stat-label">of accepted applicants signed up for onboarding within 48 hours</div>
-                            </div>
-                            <p>Same-day event scheduling reduced flaking by up to 20% vs. scheduling for a future date.</p>
-                        `
                     }
                 ]
             },
             {
-                icon: '🚀',
-                title: 'Attending Onboarding',
-                description: 'They get a magic link via text and email that signs them into Rally and opens Zoom in one click. Staff welcome them, they watch a state-specific voter education video, sign their contract, make their own vote plan, and schedule their Palooza — all on the call.',
-                heroId: 'hero-onboarding',
+                icon: '🎉',
+                title: 'Events',
+                description: 'Participants attend virtual events — first Onboarding where they learn about the program, watch a state-specific video, and sign their contract. Then Paloozas where they do live outreach to friends and family with support from our event leads.',
+                heroId: 'hero-events',
                 deepDives: [
                     {
-                        label: 'What happens on the call',
-                        preview: '1 hour: welcome, video, contract, schedule',
+                        label: 'Onboarding',
+                        preview: '1 hour: welcome, video, contract, schedule Palooza',
                         content: `
                             <p>Onboarding is a 1-hour Zoom event hosted by our Mobilization Events team:</p>
                             <p>1. Staff welcome participants<br>
@@ -1000,116 +1310,56 @@
                         `
                     },
                     {
-                        label: 'Our 90 event leads (2024)',
-                        preview: 'Mostly performers — recruited from Playbill',
-                        content: `
-                            <p>In 2024, we hired 90 non-traditional organizers as part-time event leads — primarily from the performing arts community.</p>
-                            <p>Performers bring energy through a Zoom screen, handle last-minute changes, and connect authentically. We recruited from Playbill.com and similar platforms.</p>
-                            <div class="card-stat">
-                                <div class="card-stat-value">1,329</div>
-                                <div class="card-stat-label">total events run across 5 states in 2024</div>
-                            </div>
-                        `
-                    }
-                ]
-            },
-            {
-                icon: '📚',
-                title: 'Accessing Resources & Support',
-                description: 'Now they have everything they need: a hub tailored to their state with conversation guides, sample dialogues, videos, and voting info. And when they have questions, our textline team is there 12 hours a day — ready to help, cheer them on, or even call their secretary of state.',
-                heroId: 'hero-resources',
-                deepDives: [
-                    {
-                        label: 'The resource hub (2024)',
-                        preview: '50,000+ visitors to state-specific content',
-                        content: `
-                            <p>Every participant gets access to a resource website tailored to their state:</p>
-                            <p>• Voting information and deadlines<br>
-                            • Digital materials to share with friends<br>
-                            • Tips for tough conversations with sample dialogues</p>
-                            <div class="card-stat">
-                                <div class="card-stat-value">50,000+</div>
-                                <div class="card-stat-label">unique visitors to the resource site in 2024</div>
-                            </div>
-                        `
-                    },
-                    {
-                        label: 'Live textline support',
-                        preview: '12 hours/day — we called secretaries of state',
-                        content: `
-                            <p>In 2024, our Support team handled texts and emails from 11am-11pm ET every day.</p>
-                            <p>They answered questions about Rally, voting, and the program. They cheered people on. And yes — they called secretaries of state on behalf of participants who needed help.</p>
-                        `
-                    }
-                ]
-            },
-            {
-                icon: '🎉',
-                title: 'Palooza!',
-                description: 'They join their Palooza — a one-hour virtual work session where they do live outreach to friends and family with support from our event leads. If someone needs extra help, our system spots it and moves them to a breakout room for small-group coaching.',
-                heroId: 'hero-palooza',
-                deepDives: [
-                    {
-                        label: 'The Palooza experience',
-                        preview: 'Live outreach with support',
+                        label: 'Palooza',
+                        preview: 'Live outreach with support from event leads',
                         content: `
                             <p>Paloozas are one-hour virtual work sessions where participants do their actual outreach — texting and calling their contacts — with support from event leads.</p>
-                            <div class="card-stat">
-                                <div class="card-stat-value">87,792</div>
-                                <div class="card-stat-label">individual event attendances in 2024</div>
-                            </div>
-                        `
-                    },
-                    {
-                        label: 'What participants accomplished (2024)',
-                        preview: '44 contacts each, 84% voted or made a plan',
-                        content: `
-                            <p>In 2024, participants mapped their contacts in Rally, talked to them about voting, and helped them make plans.</p>
+                            <p>If someone needs extra help, our system spots it and moves them to a breakout room for small-group coaching.</p>
                             <div class="card-stat">
                                 <div class="card-stat-value">44.1</div>
                                 <div class="card-stat-label">average contacts per completed participant</div>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            {
+                icon: '💬',
+                title: 'Talk to Friends',
+                description: 'The heart of relational organizing — participants reach out to people they actually know, help them make vote plans with personalized polling locations, and track their progress as friends move from "planning to vote" to "voted."',
+                heroId: 'hero-talk',
+                deepDives: [
+                    {
+                        label: 'The outreach flow',
+                        preview: 'Add contacts → Support ID → Vote plan → Track voted',
+                        content: `
+                            <p>Participants use Rally to manage their outreach:</p>
+                            <div class="flow-steps">
+                                <div class="flow-step">
+                                    <div class="flow-step-number">1</div>
+                                    <div class="flow-step-text"><strong>Add contacts</strong> — Import friends and family into Rally</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">2</div>
+                                    <div class="flow-step-text"><strong>Support ID</strong> — Have conversations to understand where contacts stand</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">3</div>
+                                    <div class="flow-step-text"><strong>Create vote plans</strong> — Personalized plans with polling places from the iwillvote API</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">4</div>
+                                    <div class="flow-step-text"><strong>Send reminders</strong> — Follow up as Election Day approaches</div>
+                                </div>
+                                <div class="flow-step">
+                                    <div class="flow-step-number">5</div>
+                                    <div class="flow-step-text"><strong>Track progress</strong> — AVEV data updates nightly so participants see friends move to "voted"</div>
+                                </div>
                             </div>
                             <div class="card-stat">
                                 <div class="card-stat-value">84%</div>
                                 <div class="card-stat-label">of contacts voted early or made a vote plan</div>
                             </div>
-                        `
-                    }
-                ]
-            },
-            {
-                icon: '🗳️',
-                title: 'Election Day Palooza',
-                description: 'For participants who want to do more, we offer an optional Election Day Palooza — a final push to make sure their contacts actually vote. They check in with friends and family, help solve last-minute problems, and celebrate together as results come in.',
-                heroId: null,
-                deepDives: [
-                    {
-                        label: 'The final push (2024)',
-                        preview: 'Last-minute outreach on Election Day',
-                        content: `
-                            <p>Election Day Paloozas give participants one more chance to make sure their contacts follow through on their vote plans.</p>
-                            <p>• Check if contacts have voted<br>
-                            • Help solve last-minute issues (rides, ID, polling locations)<br>
-                            • Celebrate together as a community</p>
-                        `
-                    }
-                ]
-            },
-            {
-                icon: '💰',
-                title: 'Getting Compensated',
-                description: 'After completing the program, participants receive their compensation via direct deposit or prepaid card. We pay for the work they do — because relational organizing is real work that deserves real pay.',
-                heroId: null,
-                deepDives: [
-                    {
-                        label: 'How compensation works (2024)',
-                        preview: 'Paid for completed work',
-                        content: `
-                            <p>Participants are compensated based on program completion:</p>
-                            <p>• Base payment for completing onboarding and Palooza<br>
-                            • Bonuses for referrals who complete the program<br>
-                            • Payment via direct deposit or prepaid card</p>
-                            <p>We believe relational organizing is valuable work — and we pay accordingly.</p>
                         `
                     }
                 ]
@@ -1273,6 +1523,15 @@
             if (e.key === 'ArrowRight') { stopPlaying(); nextStage(); }
             if (e.key === 'ArrowLeft') { stopPlaying(); prevStage(); }
             if (e.key === ' ') { e.preventDefault(); isPlaying ? stopPlaying() : startPlaying(); }
+        });
+
+        // Learn More cards
+        document.querySelectorAll('.learn-more-card').forEach(card => {
+            card.querySelector('.learn-more-card-header').addEventListener('click', () => {
+                const wasExpanded = card.classList.contains('expanded');
+                document.querySelectorAll('.learn-more-card').forEach(c => c.classList.remove('expanded'));
+                if (!wasExpanded) card.classList.add('expanded');
+            });
         });
 
         // Initialize
