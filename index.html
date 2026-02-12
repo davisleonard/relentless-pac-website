@@ -1128,8 +1128,7 @@
 
         <div class="controls">
             <button class="control-btn secondary" id="prevBtn">← Back</button>
-            <button class="control-btn primary" id="playBtn">▶ Play Journey</button>
-            <button class="control-btn secondary" id="nextBtn">Next →</button>
+            <button class="control-btn primary" id="nextBtn">Next →</button>
         </div>
 
         <div class="stats-footer">
@@ -1393,14 +1392,11 @@
         ];
 
         let currentStage = 0;
-        let isPlaying = false;
-        let playInterval = null;
 
         const journeyDot = document.getElementById('journeyDot');
         const pathFill = document.getElementById('pathFill');
         const infoPanel = document.getElementById('infoPanel');
         const markers = document.querySelectorAll('.stage-marker');
-        const playBtn = document.getElementById('playBtn');
 
         function getDotPosition(index) {
             const marker = markers[index];
@@ -1513,42 +1509,23 @@
 
         function nextStage() {
             if (currentStage < stages.length - 1) updateStage(currentStage + 1);
-            else if (isPlaying) stopPlaying();
         }
 
         function prevStage() {
             if (currentStage > 0) updateStage(currentStage - 1);
         }
 
-        function startPlaying() {
-            isPlaying = true;
-            playBtn.textContent = '⏸ Pause';
-            if (currentStage === stages.length - 1) updateStage(0);
-            playInterval = setInterval(() => {
-                if (currentStage < stages.length - 1) nextStage();
-                else stopPlaying();
-            }, 3500);
-        }
-
-        function stopPlaying() {
-            isPlaying = false;
-            playBtn.textContent = '▶ Play Journey';
-            if (playInterval) { clearInterval(playInterval); playInterval = null; }
-        }
-
-        document.getElementById('nextBtn').addEventListener('click', () => { stopPlaying(); nextStage(); });
-        document.getElementById('prevBtn').addEventListener('click', () => { stopPlaying(); prevStage(); });
-        playBtn.addEventListener('click', () => { isPlaying ? stopPlaying() : startPlaying(); });
+        document.getElementById('nextBtn').addEventListener('click', nextStage);
+        document.getElementById('prevBtn').addEventListener('click', prevStage);
 
         markers.forEach((marker, index) => {
-            marker.addEventListener('click', () => { stopPlaying(); updateStage(index); });
+            marker.addEventListener('click', () => updateStage(index));
         });
 
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('lightbox').classList.contains('active')) return;
-            if (e.key === 'ArrowRight') { stopPlaying(); nextStage(); }
-            if (e.key === 'ArrowLeft') { stopPlaying(); prevStage(); }
-            if (e.key === ' ') { e.preventDefault(); isPlaying ? stopPlaying() : startPlaying(); }
+            if (e.key === 'ArrowRight') nextStage();
+            if (e.key === 'ArrowLeft') prevStage();
         });
 
         // Behind the Scenes content
