@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relentless: Paid Relational Organizing</title>
+    <link rel="icon" type="image/png" href="rally favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-white: #FFFFFF;
+            --bg-off-white: #F7F8FA;
+            --bg-dark: #0A0A0A;
+            --text-primary: #182d53;
+            --text-secondary: #4a5568;
+            --text-light: #FFFFFF;
+            --accent-blue: #3B82F6;
+            --accent-light-blue: #86c7ed;
+            --accent-hot: #EF4444;
+            --border-subtle: rgba(24, 45, 83, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.1);
+            --space-section: clamp(60px, 10vw, 120px);
+            --space-block: clamp(32px, 5vw, 64px);
+            --blue-accent: #3B82F6;
+            --purple-accent: #7C3AED;
+            --teal-accent: #14B8A6;
+            --green-accent: #22C55E;
+            --amber-accent: #F59E0B;
+            --coral-accent: #EF4444;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== REVEAL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: box-shadow 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-wordmark {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1.5rem 2rem;
+                gap: 1.5rem;
+                border-bottom: 1px solid var(--border-subtle);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('Rally Gifs.gif') center/cover no-repeat;
+            opacity: 0.1;
+            filter: grayscale(40%);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.93) 0%, rgba(255,255,255,0.97) 50%, rgba(255,255,255,1) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 11vw, 8rem);
+            font-weight: 900;
+            line-height: 0.92;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title .highlight {
+            color: var(--accent-blue);
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .hero-description {
+            font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 1;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: var(--text-secondary);
+            opacity: 0.3;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: var(--accent-blue);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0% { top: -50%; }
+            100% { top: 150%; }
+        }
+
+        /* ===== SECTION HEADERS ===== */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-block);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            line-height: 1;
+        }
+
+        .section-subtitle {
+            font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== PROGRAM JOURNEY ===== */
+        .journey-section {
+            padding: var(--space-section) 2rem;
+            background: var(--bg-off-white);
+        }
+
+        .journey-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ===== JOURNEY PROGRESS BAR ===== */
+        .journey-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .journey-progress::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 3px;
+            background: var(--border-subtle);
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .journey-progress-fill {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue-accent), var(--teal-accent));
+            border-radius: 2px;
+            z-index: 1;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0;
+        }
+
+        .journey-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .journey-marker:hover {
+            transform: translateY(-3px);
+        }
+
+        .journey-marker-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-white);
+            border: 3px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .journey-marker.active .journey-marker-dot {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue);
+            box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .journey-marker.active .journey-marker-dot span {
+            filter: grayscale(0) brightness(1.1);
+        }
+
+        .journey-marker.completed .journey-marker-dot {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .journey-marker-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            text-align: center;
+            max-width: 80px;
+            line-height: 1.3;
+        }
+
+        .journey-marker.active .journey-marker-label,
+        .journey-marker.completed .journey-marker-label {
+            opacity: 1;
+            color: var(--accent-blue);
+        }
+
+        @media (max-width: 600px) {
+            .journey-marker-label {
+                display: none;
+            }
+            .journey-marker-dot {
+                width: 34px;
+                height: 34px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .flowchart-node {
+            position: relative;
+            scroll-margin-top: 80px;
+        }
+
+        .node-row {
+            display: flex;
+            gap: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-white);
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .node-row:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .node-accent {
+            flex-shrink: 0;
+            width: 5px;
+        }
+
+        .flowchart-node:nth-child(1) .node-accent { background: var(--blue-accent); }
+        .flowchart-node:nth-child(2) .node-accent { background: var(--purple-accent); }
+        .flowchart-node:nth-child(3) .node-accent { background: var(--teal-accent); }
+        .flowchart-node:nth-child(4) .node-accent { background: var(--green-accent); }
+        .flowchart-node:nth-child(5) .node-accent { background: var(--amber-accent); }
+        .flowchart-node:nth-child(6) .node-accent { background: var(--coral-accent); }
+
+        .node-content {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            position: relative;
+        }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .node-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .node-step {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            opacity: 0.4;
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+        }
+
+        .node-title {
+            font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .node-metric {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.08);
+            padding: 0.4rem 0.8rem;
+            border-radius: 100px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .node-chevron {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            opacity: 0.4;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .node-row.expanded .node-chevron {
+            transform: rotate(180deg);
+        }
+
+        .node-details {
+            display: none;
+            padding: 1.5rem 2rem 2rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-subtle);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            margin-top: -1px;
+        }
+
+        .node-row.expanded + .node-details {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .node-row.expanded {
+            border-radius: 8px 8px 0 0;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .details-intro {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            padding-left: 0.5rem;
+            border-left: 2px solid var(--border-subtle);
+        }
+
+        .node-gif {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .donut-chart-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .donut-chart-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .donut-chart-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .donut-chart {
+            width: 160px;
+            height: 160px;
+            flex-shrink: 0;
+        }
+
+        .donut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .donut-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .donut-legend-item strong {
+            min-width: 3rem;
+        }
+
+        .donut-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .details-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .details-list li {
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+
+        .details-list li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            opacity: 0.4;
+        }
+
+        .details-list strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .details-list li.standout {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 6px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .details-list li.standout:before {
+            content: "★";
+            width: auto;
+            height: auto;
+            border-radius: 0;
+            background: none;
+            opacity: 1;
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            top: 0.75rem;
+            left: 0.85rem;
+        }
+
+        .details-list li.standout strong {
+            color: var(--accent-blue);
+        }
+
+        /* ===== STAT CALLOUT BOXES ===== */
+        .stat-callouts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-callout {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.04), rgba(59, 130, 246, 0.08));
+            border: 1px solid rgba(59, 130, 246, 0.12);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-callout-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-callout-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 500px) {
+            .stat-callouts {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== DEEP DIVE CARDS ===== */
+        .deep-dives {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .deep-dives-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .deep-dive-card {
+            background: var(--bg-white);
+            border: 1px solid rgba(134, 199, 237, 0.25);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .deep-dive-card:hover {
+            border-color: rgba(134, 199, 237, 0.5);
+            box-shadow: 0 4px 16px rgba(134, 199, 237, 0.1);
+        }
+
+        .deep-dive-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            gap: 1rem;
+        }
+
+        .deep-dive-header-text {
+            flex: 1;
+        }
+
+        .deep-dive-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
+
+        .deep-dive-preview {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .deep-dive-header.expanded .deep-dive-preview {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .deep-dive-chevron {
+            font-size: 0.65rem;
+            color: var(--accent-light-blue);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-top: 0.3rem;
+        }
+
+        .deep-dive-header.expanded .deep-dive-chevron {
+            transform: rotate(180deg);
+        }
+
+        .deep-dive-body {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .deep-dive-header.expanded + .deep-dive-body {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .deep-dive-body p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .deep-dive-body p strong {
+            color: var(--text-primary);
+        }
+
+        .deep-dive-stat {
+            background: linear-gradient(135deg, rgba(134, 199, 237, 0.06), rgba(134, 199, 237, 0.12));
+            border-left: 4px solid var(--accent-light-blue);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+
+        .deep-dive-stat-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .deep-dive-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .deep-dive-future {
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .metric-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .metric-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--bg-off-white);
+            color: var(--text-primary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* ===== OUTREACH FLOW STEPS ===== */
+        .outreach-flow {
+            margin-bottom: 1.5rem;
+        }
+
+        .outreach-flow-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .outreach-flow-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .outreach-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-off-white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .outreach-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .outreach-step-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .outreach-step-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .outreach-step-text strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .node-content {
+                padding: 1.2rem 1rem;
+            }
+
+            .node-header {
+                flex-wrap: wrap;
+            }
+
+            .node-metric {
+                font-size: 0.7rem;
+            }
+
+            .node-details {
+                padding: 1rem 1rem 1.5rem;
+            }
+
+            .details-list li {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ===== VIDEO THEATER ===== */
+        .video-theater {
+            background: var(--bg-dark);
+            padding: var(--space-section) 2rem;
+        }
+
+        .video-theater .section-title {
+            color: var(--text-light);
+        }
+
+        .video-theater .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .video-block {
+            margin-bottom: var(--space-block);
+        }
+
+        .video-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 */
+            border-radius: 8px;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .video-wrapper iframe,
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .video-caption {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .video-placeholder-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #111827, #1E293B);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .play-icon {
+            width: 72px;
+            height: 72px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .play-icon::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 0 12px 20px;
+            border-color: transparent transparent transparent rgba(255, 255, 255, 0.5);
+            margin-left: 4px;
+        }
+
+        .placeholder-title {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 700;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .coming-soon-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-divider {
+            text-align: center;
+            margin: var(--space-block) 0;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ===== VOICES MOSAIC ===== */
+        .voices-section {
+            padding: var(--space-section) 2rem;
+            background: var(--bg-white);
+        }
+
+        .screenshot-mosaic {
+            columns: 3;
+            column-gap: 16px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .screenshot-mosaic img {
+            width: 100%;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            break-inside: avoid;
+            display: block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .screenshot-mosaic img:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+        }
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(24, 45, 83, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: lbFadeIn 0.3s ease;
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+        }
+
+        @keyframes lbFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: lbZoomIn 0.3s ease;
+        }
+
+        @keyframes lbZoomIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: all 0.3s ease;
+            z-index: 10000;
+            line-height: 1;
+        }
+
+        .lightbox-close:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .lightbox-prev { left: 1.5rem; }
+        .lightbox-next { right: 1.5rem; }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 600px) {
+            .lightbox-nav { display: none; }
+        }
+
+        @media (max-width: 900px) {
+            .screenshot-mosaic { columns: 2; }
+        }
+
+        @media (max-width: 500px) {
+            .screenshot-mosaic { columns: 1; max-width: 400px; }
+        }
+
+        /* ===== QA SECTION ===== */
+        .qa-section {
+            padding: var(--space-section) 2rem;
+            background: var(--bg-off-white);
+        }
+
+        .qa-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .qa-intro {
+            font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto var(--space-block);
+            text-align: center;
+        }
+
+        .qa-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: var(--space-block);
+        }
+
+        .qa-layer {
+            background: var(--bg-white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .qa-layer:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .qa-layer-header {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+        }
+
+        .qa-layer-icon {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .qa-layer:nth-child(1) .qa-layer-icon { background: rgba(59, 130, 246, 0.1); }
+        .qa-layer:nth-child(2) .qa-layer-icon { background: rgba(245, 158, 11, 0.1); }
+        .qa-layer:nth-child(3) .qa-layer-icon { background: rgba(239, 68, 68, 0.1); }
+        .qa-layer:nth-child(4) .qa-layer-icon { background: rgba(20, 184, 166, 0.1); }
+
+        .qa-layer-text {
+            flex: 1;
+        }
+
+        .qa-layer-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .qa-layer-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .qa-layer-chevron {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            opacity: 0.4;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .qa-layer-header.expanded .qa-layer-chevron {
+            transform: rotate(180deg);
+        }
+
+        .qa-layer-details {
+            display: none;
+            padding: 0 2rem 1.5rem;
+        }
+
+        .qa-layer-header.expanded + .qa-layer-details {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        .qa-layer-details ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .qa-layer-details li {
+            color: var(--text-secondary);
+            margin-bottom: 0.7rem;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+
+        .qa-layer-details li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            opacity: 0.4;
+        }
+
+        .qa-layer-details li strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .qa-grade-strip {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .qa-grade {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .qa-grade-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.2rem;
+        }
+
+        .qa-grade-desc {
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .qa-grade.low {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        .qa-grade.low .qa-grade-label { color: #16a34a; }
+        .qa-grade.low .qa-grade-desc { color: var(--text-secondary); }
+
+        .qa-grade.medium {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .qa-grade.medium .qa-grade-label { color: #d97706; }
+        .qa-grade.medium .qa-grade-desc { color: var(--text-secondary); }
+
+        .qa-grade.high {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .qa-grade.high .qa-grade-label { color: #dc2626; }
+        .qa-grade.high .qa-grade-desc { color: var(--text-secondary); }
+
+        .qa-validation-callout {
+            background: var(--bg-white);
+            border: 1px solid var(--border-subtle);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 8px 8px 0;
+            padding: 1.5rem 2rem;
+        }
+
+        .qa-validation-callout p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .qa-validation-callout strong {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .qa-layer-header {
+                padding: 1.2rem 1rem;
+                gap: 1rem;
+            }
+
+            .qa-layer-details {
+                padding: 0 1rem 1.2rem;
+            }
+
+            .qa-grade-strip {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .qa-layer-title {
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--text-primary);
+            color: var(--text-light);
+            padding: var(--space-section) 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-button {
+            display: inline-block;
+            background: var(--accent-blue);
+            color: var(--text-light);
+            padding: 0.9rem 2.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .footer-button:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .footer-url {
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            opacity: 0.4;
+            font-weight: 500;
+        }
+
+        /* ===== GLOBAL RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 5rem 1.5rem 3rem;
+                min-height: 90vh;
+            }
+
+            .journey-section,
+            .video-theater,
+            .voices-section,
+            .qa-section,
+            footer {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-wordmark">RELENTLESS</div>
+        <ul class="nav-links">
+            <li><a href="#journey">The Model</a></li>
+            <li><a href="#training">Training</a></li>
+            <li><a href="#voices">Voices</a></li>
+            <li><a href="#qa">QA</a></li>
+        </ul>
+        <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title reveal">RELENTLESS</h1>
+            <p class="hero-tagline reveal reveal-delay-1">Scaled relational + civic education + high-opportunity voters</p>
+            <p class="hero-description reveal reveal-delay-2">
+                We invest in recruiting hard-to-reach and infrequent voters; pay them to attend a civic training; then engage them as Voting Ambassadors to mobilize their communities to vote.
+            </p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Program Journey -->
+    <section class="journey-section" id="journey">
+        <div class="section-header reveal">
+            <h2 class="section-title">The Relentless Model</h2>
+            <p class="section-subtitle">Click any stage to see how it works.</p>
+        </div>
+
+        <div class="journey-container">
+            <div class="journey-progress reveal">
+                <div class="journey-progress-fill" id="progressFill"></div>
+                <div class="journey-marker" data-node="0" onclick="jumpToNode(0)">
+                    <div class="journey-marker-dot"><span>📣</span></div>
+                    <div class="journey-marker-label">Recruit</div>
+                </div>
+                <div class="journey-marker" data-node="1" onclick="jumpToNode(1)">
+                    <div class="journey-marker-dot"><span>🎓</span></div>
+                    <div class="journey-marker-label">Onboard & Train</div>
+                </div>
+                <div class="journey-marker" data-node="2" onclick="jumpToNode(2)">
+                    <div class="journey-marker-dot"><span>🗺️</span></div>
+                    <div class="journey-marker-label">Voter Outreach</div>
+                </div>
+                <div class="journey-marker" data-node="3" onclick="jumpToNode(3)">
+                    <div class="journey-marker-dot"><span>💬</span></div>
+                    <div class="journey-marker-label">Chase & Support</div>
+                </div>
+                <div class="journey-marker" data-node="4" onclick="jumpToNode(4)">
+                    <div class="journey-marker-dot"><span>🗳️</span></div>
+                    <div class="journey-marker-label">GOTV</div>
+                </div>
+            </div>
+
+            <div class="flowchart">
+                <!-- Node 01: Recruit -->
+                <div class="flowchart-node reveal reveal-delay-1">
+                    <div class="node-row" onclick="toggleNode(this)">
+                        <div class="node-accent"></div>
+                        <div class="node-content">
+                            <div class="node-header">
+                                <div class="node-header-left">
+                                    <h3 class="node-title">Recruit</h3>
+                                </div>
+                                <span class="node-chevron">&#9662;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="node-details">
+                        <div class="stat-callouts">
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">97,380</div>
+                                <div class="stat-callout-label">Applicants in 2024</div>
+                            </div>
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">40%</div>
+                                <div class="stat-callout-label">Return rate from 2022</div>
+                            </div>
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">37%</div>
+                                <div class="stat-callout-label">From referrals</div>
+                            </div>
+                        </div>
+                        <div class="deep-dives">
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Multi-channel recruitment</div>
+                                        <div class="deep-dive-preview">SMS, paid media, partnerships, and referrals</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p>We recruit through <strong>SMS, paid digital media, on-the-ground &amp; digital partnerships, and referrals</strong>. Referrals were our top source of applicants (37%) in 2024.</p>
+                                    <div class="donut-chart-container">
+                                        <h4 class="donut-chart-title">2024 Recruitment Channels</h4>
+                                        <div class="donut-chart-row">
+                                            <svg class="donut-chart" viewBox="0 0 42 42">
+                                                <circle class="donut-hole" cx="21" cy="21" r="15.91549431" fill="#fff"></circle>
+                                                <circle cx="21" cy="21" r="15.91549431" fill="transparent" stroke="#6FA8DC" stroke-width="5" stroke-dasharray="36.8 63.2" stroke-dashoffset="25"></circle>
+                                                <circle cx="21" cy="21" r="15.91549431" fill="transparent" stroke="#3D7BBF" stroke-width="5" stroke-dasharray="30.3 69.7" stroke-dashoffset="88.2"></circle>
+                                                <circle cx="21" cy="21" r="15.91549431" fill="transparent" stroke="#A8C7E6" stroke-width="5" stroke-dasharray="25.0 75.0" stroke-dashoffset="57.9"></circle>
+                                                <circle cx="21" cy="21" r="15.91549431" fill="transparent" stroke="#1B3A5C" stroke-width="5" stroke-dasharray="7.2 92.8" stroke-dashoffset="32.9"></circle>
+                                                <circle cx="21" cy="21" r="15.91549431" fill="transparent" stroke="#B0BEC5" stroke-width="5" stroke-dasharray="0.7 99.3" stroke-dashoffset="25.7"></circle>
+                                            </svg>
+                                            <div class="donut-legend">
+                                                <div class="donut-legend-item"><span class="donut-swatch" style="background:#6FA8DC"></span><strong>36.8%</strong> Referrals</div>
+                                                <div class="donut-legend-item"><span class="donut-swatch" style="background:#3D7BBF"></span><strong>30.3%</strong> SMS</div>
+                                                <div class="donut-legend-item"><span class="donut-swatch" style="background:#A8C7E6"></span><strong>25.0%</strong> Digital Ads</div>
+                                                <div class="donut-legend-item"><span class="donut-swatch" style="background:#1B3A5C"></span><strong>7.2%</strong> Partnerships</div>
+                                                <div class="donut-legend-item"><span class="donut-swatch" style="background:#B0BEC5"></span><strong>0.7%</strong> Other</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Retention and referrals</div>
+                                        <div class="deep-dive-preview">Over 40% of 2022 participants returned in 2024</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p>Over 40% of 2022 participants returned in 2024 &mdash; and brought friends. Referrals were our top source of applicants (37%) in 2024.</p>
+                                    <p>Referral incentives work because they create accountability. Participants get the referral bonus only if <strong>both they AND their referrals complete the program</strong>. This means participants are motivated to follow up with the people they recruit &mdash; not just sign them up and forget about them.</p>
+                                    <div class="deep-dive-stat">
+                                        <div class="deep-dive-stat-value">28.2%</div>
+                                        <div class="deep-dive-stat-label">completion rate for referrals w/required completion (vs. 17% before policy implemented) &mdash; accountability made the difference</div>
+                                    </div>
+                                    <p class="deep-dive-future"><strong>In 2026:</strong> Participants will have visibility into their referrals' progress through Rally so they can push them to complete.</p>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Applicant vetting</div>
+                                        <div class="deep-dive-preview">Voter file matching, 5-tier scoring, fraud detection</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p>Applicants are matched to the voter file (83% auto-match rate using Google Maps API for address accuracy) and scored in our <strong>5-tier scoring system</strong> based on vote propensity, partisanship, location, referral status, phone and email verification, and <a href="#qa" style="color: var(--accent-blue); text-decoration: underline; text-underline-offset: 2px;">fraud score</a>.</p>
+                                    <p>Applications are automatically accepted, rejected, or flagged for manual review based on tier.</p>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Early funding reduces cost</div>
+                                        <div class="deep-dive-preview">The infrastructure compounds over time</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p><strong>Recruitment costs decrease 20% year-over-year</strong> in the same state. Word of mouth spreads, brand recognition grows, and returning participants recruit their own networks. Each cycle builds on the last.</p>
+                                    <p><strong>Early funding can reduce recruitment costs by as much as 40%,</strong> by generating low-cost compounding referral chains in a less saturated media environment.</p>
+                                    <div class="deep-dive-stat">
+                                        <div class="deep-dive-stat-value">$25.47</div>
+                                        <div class="deep-dive-stat-label">cost per applicant via referrals &mdash; our most efficient channel</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 02: Onboard & Train -->
+                <div class="flowchart-node reveal reveal-delay-2">
+                    <div class="node-row" onclick="toggleNode(this)">
+                        <div class="node-accent"></div>
+                        <div class="node-content">
+                            <div class="node-header">
+                                <div class="node-header-left">
+                                    <h3 class="node-title">Onboard & Train</h3>
+                                </div>
+                                <span class="node-chevron">&#9662;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="node-details">
+                        <p class="details-intro">Live, race-specific Zoom training sessions run by our specialized Events team. This hour of attention we get from low-propensity voters is the foundation of our program.</p>
+                        <ul class="details-list">
+                            <li><strong>End-to-end integration:</strong> Rally&rsquo;s native events platform handles event signup, reminders, join links, and automatic attendance tracking.</li>
+                            <li><strong>Longform persuasion training videos:</strong> We create high-quality <a href="#training" style="color: var(--accent-blue); text-decoration: underline; text-underline-offset: 2px;">persuasion videos</a> focused on laying the civics foundation (What does a House representative do? How does it affect me?) and concretely imparting the tangible impacts of the upcoming election on participants&rsquo; lives.</li>
+                            <li><strong>Rally orientation:</strong> Participants get started by making their own voting plans, then get to work adding contacts, all with support from our team.</li>
+                            <li><strong>Schedule next event:</strong> In 2024, 80% of attendees scheduled their next event (the &ldquo;Turnout Palooza&rdquo; work session) live on the call.</li>
+                            <li><strong>Scale:</strong> In 2024, 41,264 unique participants attended an onboarding.</li>
+                        </ul>
+                        <div class="stat-callouts">
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">41,264</div>
+                                <div class="stat-callout-label">Attended onboarding</div>
+                            </div>
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">80%</div>
+                                <div class="stat-callout-label">Scheduled next event live</div>
+                            </div>
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">5+</div>
+                                <div class="stat-callout-label">Events per day</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 03: Voter Outreach -->
+                <div class="flowchart-node reveal reveal-delay-3">
+                    <div class="node-row" onclick="toggleNode(this)">
+                        <div class="node-accent"></div>
+                        <div class="node-content">
+                            <div class="node-header">
+                                <div class="node-header-left">
+                                    <h3 class="node-title">Voter Outreach</h3>
+                                </div>
+                                <span class="node-chevron">&#9662;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="node-details">
+                        <div class="outreach-flow">
+                            <div class="outreach-flow-label">The outreach flow</div>
+                            <div class="outreach-flow-subtitle">Participants use Rally to manage their outreach:</div>
+                            <div class="outreach-step">
+                                <div class="outreach-step-num">1</div>
+                                <div class="outreach-step-text"><strong>Add contacts</strong> &mdash; Add friends and family to Rally and match to voter file</div>
+                            </div>
+                            <div class="outreach-step">
+                                <div class="outreach-step-num">2</div>
+                                <div class="outreach-step-text"><strong>Support ID</strong> &mdash; Have conversations to understand where contacts stand</div>
+                            </div>
+                            <div class="outreach-step">
+                                <div class="outreach-step-num">3</div>
+                                <div class="outreach-step-text"><strong>Create vote plans</strong> &mdash; Personalized plans with polling places from the IWillVote API</div>
+                            </div>
+                            <div class="outreach-step">
+                                <div class="outreach-step-num">4</div>
+                                <div class="outreach-step-text"><strong>Send reminders</strong> &mdash; Follow up as Election Day approaches</div>
+                            </div>
+                            <div class="outreach-step">
+                                <div class="outreach-step-num">5</div>
+                                <div class="outreach-step-text"><strong>Track progress</strong> &mdash; AVEV data updates nightly so participants see friends move to &ldquo;voted&rdquo;</div>
+                            </div>
+                        </div>
+                        <div class="deep-dives">
+                            <div class="deep-dives-label">Deep Dive</div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Map the Network</div>
+                                        <div class="deep-dive-preview">1M+ unique voters reached, 90% voter file match rate</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p>Participants add their personal networks to Rally. Every contact is hand-matched to the voter file by a real-life associate.</p>
+                                    <ul class="details-list">
+                                        <li><strong>90% voter file match rate;</strong> 83% match uniqueness rate in 2024</li>
+                                        <li><strong>Average network size:</strong> 45 contacts per completed participant</li>
+                                        <li><strong>Scale:</strong> In 2024, participants mapped 1,219,658 total contacts &rarr; 1,014,902 unique voters</li>
+                                        <li><strong>Support IDs:</strong> 1,640,940 support IDs collected across two passes in 2024</li>
+                                        <li><strong>Relationships cross district boundaries:</strong> In 2024, over half the contacts added in a given competitive congressional district were added by contacts living in other parts of the state.</li>
+                                    </ul>
+                                    <div class="stat-callouts">
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">1M+</div>
+                                            <div class="stat-callout-label">Unique voters reached</div>
+                                        </div>
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">90%</div>
+                                            <div class="stat-callout-label">Voter file match rate</div>
+                                        </div>
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">45</div>
+                                            <div class="stat-callout-label">Avg contacts per person</div>
+                                        </div>
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">1.6M</div>
+                                            <div class="stat-callout-label">Support IDs collected</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Make Vote Plans</div>
+                                        <div class="deep-dive-preview">50-state polling data, shareable links, district-specific slates</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p>Participants make and share customized vote plans for each contact (and themselves!) with 50-state polling place data courtesy of IWillVote.</p>
+                                    <ul class="details-list">
+                                        <li><strong>Polling places:</strong> The DNC&rsquo;s IWillVote polling place API delivers early vote locations, dropboxes, and Election Day polling places for every user and contact</li>
+                                        <li><strong>Plan components:</strong> Exact polling location, state-specific ID requirements, vote method (early/vote by mail/Election Day), date and time of day, transportation</li>
+                                        <li><strong>Shareable links:</strong> Contacts view plans without needing a Rally account</li>
+                                        <li><strong>Relational Slates:</strong> Campaigns are loaded with customizable district-specific candidate info, creating a handy ballot guide for contacts within the shared voting plan</li>
+                                    </ul>
+                                    <div class="stat-callouts">
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">50</div>
+                                            <div class="stat-callout-label">States covered</div>
+                                        </div>
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">&#10003;</div>
+                                            <div class="stat-callout-label">Shareable links</div>
+                                        </div>
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">&#10003;</div>
+                                            <div class="stat-callout-label">District-specific slates</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 04: Chase & Support -->
+                <div class="flowchart-node reveal reveal-delay-4">
+                    <div class="node-row" onclick="toggleNode(this)">
+                        <div class="node-accent"></div>
+                        <div class="node-content">
+                            <div class="node-header">
+                                <div class="node-header-left">
+                                    <h3 class="node-title">Chase & Support</h3>
+                                </div>
+                                <span class="node-chevron">&#9662;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="node-details">
+                        <p class="details-intro">Participants are chased daily via SMS, phone call, and/or email to complete their next most important action. Support is always available via our 12-hour live textline.</p>
+                        <div class="deep-dives">
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Palooza</div>
+                                        <div class="deep-dive-preview">Required virtual work sessions where participants do their actual outreach</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <p>Turnout Paloozas are required one-hour virtual work sessions where participants do their actual outreach &mdash; texting and calling their contacts &mdash; with support from event leads.</p>
+                                    <p>If someone needs extra help, our system spots it and moves them to a breakout room for small-group coaching upon entry to the call.</p>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Chase</div>
+                                        <div class="deep-dive-preview">Daily personalized nudges, 3-phase escalation, one ask per day</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <ul class="details-list">
+                                        <li><strong>Chase =</strong> Daily nudges, personalized based on next highest priority action</li>
+                                        <li><strong>Operational chase:</strong> Daily automated chase pushing participants to complete their next required action. Participants are automatically sorted into &ldquo;chase buckets&rdquo; based on progress through the program (Needs to start adding contacts, Vote plans halfway complete, Needs to schedule palooza, etc)</li>
+                                        <li><strong>Programmatic chase:</strong> Voting-related chase messages sent around voting deadlines, participant vote status, contact vote status (Plans to vote today, 3+ contacts missed planned vote date, Early voting starts tomorrow, etc)</li>
+                                        <li><strong>3-phase messaging escalation:</strong> Phase 1 (within 24 hrs), Phase 2 (every other day with adjusted copy), Phase 3 (weekly). Final week: daily.</li>
+                                        <li><strong>One ask per day rule:</strong> Never more than one operational + one programmatic message daily (relaxed final week only)</li>
+                                    </ul>
+                                    <div class="stat-callouts">
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">1/day</div>
+                                            <div class="stat-callout-label">Max asks per person</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Support</div>
+                                        <div class="deep-dive-preview">12-hour live textline, voter assistance & protection</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <ul class="details-list">
+                                        <li><strong>12-hour daily support textline:</strong> 11am-11pm ET. Tech support, contact brainstorming, voting questions, encouragement</li>
+                                        <li><strong>Voter assistance &amp; protection:</strong> State-specific Voter Protection captains handle voting-related questions and issues.</li>
+                                    </ul>
+                                    <div class="stat-callouts">
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">12hr</div>
+                                            <div class="stat-callout-label">Daily live textline</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="deep-dive-card">
+                                <div class="deep-dive-header" onclick="toggleDeepDive(this)">
+                                    <div class="deep-dive-header-text">
+                                        <div class="deep-dive-title">Resources</div>
+                                        <div class="deep-dive-preview">Voter Education site with 50K+ visitors in 2024</div>
+                                    </div>
+                                    <span class="deep-dive-chevron">&#9662;</span>
+                                </div>
+                                <div class="deep-dive-body">
+                                    <ul class="details-list">
+                                        <li><strong>Voter Education resource site:</strong> 50,000+ unique visitors in 2024. Issue-specific talking points, articles and social media content to share, conversation guides for: persuading third-party voters, talking to undecided, encouraging non-voters, etc</li>
+                                    </ul>
+                                    <img src="Rally Gifs resource.gif" alt="Rally chase and support in action" class="node-gif" loading="lazy" style="margin-top: 1rem;">
+                                    <div class="stat-callouts" style="margin-top: 1rem;">
+                                        <div class="stat-callout">
+                                            <div class="stat-callout-value">50K+</div>
+                                            <div class="stat-callout-label">Resource site visitors</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 05: Get Out the Vote -->
+                <div class="flowchart-node reveal reveal-delay-5">
+                    <div class="node-row" onclick="toggleNode(this)">
+                        <div class="node-accent"></div>
+                        <div class="node-content">
+                            <div class="node-header">
+                                <div class="node-header-left">
+                                    <h3 class="node-title">Get Out the Vote</h3>
+                                </div>
+                                <span class="node-chevron">&#9662;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="node-details">
+                        <p class="details-intro">Absentee vote/early vote tracking via Catalist, daily personalized reports, programmatic chase, Turnout Paloozas and Election Day events. Every participant sees their impact immediately.</p>
+                        <ul class="details-list">
+                            <li><strong>Daily AVEV data pipeline:</strong> Daily vote status from Catalist for every contact, reported in Rally, in chase messages, and Early Vote Reports</li>
+                            <li><strong>Daily personalized &ldquo;Early Vote Reports&rdquo;:</strong> Emails sent to participants daily during the early voting period dividing their contacts into three lists: Already voted (celebrate), Has plan, still needs to vote (remind), Needs a plan (help). Early Vote Reports were highly popular in 2024, with a 55.7% average open rate and 15.6% click-through.</li>
+                            <li><strong>Election Day Vote Report:</strong> On Election Day, we send a modified email report that divides remaining contacts into buckets by planned voting time (morning/afternoon/evening voters). This saw a 65% open rate &amp; 27.5% click-through rate in 2024. Participants were also sent SMS reminders of which of their contacts planned to vote in the next few hours periodically throughout Election Day.</li>
+                            <li><strong>Election Day Polls Parties:</strong> Optional 1-hour live events running every hour polls are open. Participants call through their contacts, ask voting questions, share their voting stories and stickers, and have the opportunity to win prizes. In 2024, 21,603 participants attended.</li>
+                        </ul>
+                        <div class="stat-callouts">
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">✓</div>
+                                <div class="stat-callout-label">AVEV data</div>
+                            </div>
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">65%</div>
+                                <div class="stat-callout-label">E-Day report open rate</div>
+                            </div>
+                            <div class="stat-callout">
+                                <div class="stat-callout-value">21,603</div>
+                                <div class="stat-callout-label">E-Day Polls Party attendees</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Theater -->
+    <section class="video-theater" id="training">
+        <div class="section-header reveal">
+            <h2 class="section-title">See the Training</h2>
+            <p class="section-subtitle">Every participant watches a custom race-specific civic education video. Here are our two most recent.</p>
+        </div>
+
+        <div class="video-container">
+            <div class="video-block reveal">
+                <div class="video-wrapper">
+                    <iframe src="https://drive.google.com/file/d/1k5RkdpL3VcQyFF4qte3CrZtJfWi6b4q7/preview" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <p class="video-caption">2025 Pennsylvania Supreme Court Retention Election</p>
+            </div>
+
+            <div class="video-divider">Next Up</div>
+
+            <div class="video-block reveal reveal-delay-1">
+                <div class="video-wrapper">
+                    <iframe src="https://drive.google.com/file/d/1EvzomtD3cqT-6RIkEu7Z2BfYm2sgKv_R/preview" allow="autoplay" allowfullscreen></iframe>
+                </div>
+                <p class="video-caption">2026 Texas SD-9 Special Election Runoff</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voices Mosaic -->
+    <section class="voices-section" id="voices">
+        <div class="section-header reveal">
+            <h2 class="section-title">Voices from the Ground</h2>
+            <p class="section-subtitle">Real messages from Relentless participants.</p>
+        </div>
+
+        <div class="screenshot-mosaic">
+            <img src="MS for web 2/backforth.png" alt="Participant conversation" class="reveal" loading="lazy">
+            <img src="MS for web 2/what we've done (15).png" alt="Participant story" class="reveal reveal-delay-1" loading="lazy">
+            <img src="MS for web 2/111.png" alt="Participant message" class="reveal reveal-delay-2" loading="lazy">
+            <img src="MS for web 2/what we've done (3).png" alt="Participant message" class="reveal" loading="lazy">
+            <img src="MS for web 2/211.png" alt="Participant message" class="reveal reveal-delay-1" loading="lazy">
+            <img src="MS for web 2/what we've done (7).png" alt="Participant story" class="reveal reveal-delay-2" loading="lazy">
+            <img src="MS for web 2/what we've done (4).png" alt="Participant message" class="reveal" loading="lazy">
+            <img src="MS for web 2/what we've done (12).png" alt="Participant message" class="reveal reveal-delay-1" loading="lazy">
+            <img src="MS for web 2/what we've done.png" alt="Participant message" class="reveal reveal-delay-2" loading="lazy">
+            <img src="MS for web 2/what we've done (1).png" alt="Participant message" class="reveal" loading="lazy">
+            <img src="MS for web 2/what we've done (9).png" alt="Participant message" class="reveal reveal-delay-1" loading="lazy">
+            <img src="MS for web 2/what we've done (5).png" alt="Participant message" class="reveal reveal-delay-2" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Quality Assurance & Fraud Prevention -->
+    <section class="qa-section" id="qa">
+        <div class="section-header reveal">
+            <h2 class="section-title">Quality Assurance</h2>
+            <p class="section-subtitle">Because we pay people to organize, we build systems to ensure every dollar drives real voter contact.</p>
+        </div>
+
+        <div class="qa-container">
+            <p class="qa-intro reveal">All voter contact has some amount of fraud. Our approach is to detect it early, monitor it continuously, and remove bad actors before they get paid. We layer automated checks at every stage of the program.</p>
+
+            <div class="qa-layers">
+                <!-- Layer 1: Application Vetting -->
+                <div class="qa-layer reveal reveal-delay-1">
+                    <div class="qa-layer-header" onclick="toggleQA(this)">
+                        <div class="qa-layer-icon">&#128269;</div>
+                        <div class="qa-layer-text">
+                            <div class="qa-layer-title">Application Vetting</div>
+                            <div class="qa-layer-subtitle">Automated checks before anyone enters the program</div>
+                        </div>
+                        <span class="qa-layer-chevron">&#9662;</span>
+                    </div>
+                    <div class="qa-layer-details">
+                        <ul>
+                            <li><strong>Email &amp; phone validation:</strong> Every applicant's email and mobile phone are checked for validity at signup. Invalid contact info is flagged immediately.</li>
+                            <li><strong>Domestic phone verification:</strong> Phone numbers without a US country code are flagged as high risk and marked ineligible.</li>
+                            <li><strong>IP address analysis:</strong> We record the IP address used to submit each application. Applications sharing an IP with 1-2 others require manager review; 3+ shared IPs are flagged as likely fraudulent.</li>
+                            <li><strong>IP geolocation:</strong> Applications originating from outside the US are automatically marked ineligible. Out-of-state IPs are flagged for review.</li>
+                            <li><strong>Email domain reputation:</strong> We check every email domain against the WhoisXML API for offshore registration, malware blocklists, phishing blocklists, and spam blocklists. Flagged domains receive a red flag.</li>
+                            <li><strong>Referral network analysis:</strong> If more than 35% of a user's referrals are high-risk, the referrer is also flagged as high risk.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Layer 2: Fraud Grading System -->
+                <div class="qa-layer reveal reveal-delay-2">
+                    <div class="qa-layer-header" onclick="toggleQA(this)">
+                        <div class="qa-layer-icon">&#9888;&#65039;</div>
+                        <div class="qa-layer-text">
+                            <div class="qa-layer-title">Fraud Grading System</div>
+                            <div class="qa-layer-subtitle">Every applicant receives a composite fraud grade, updated daily</div>
+                        </div>
+                        <span class="qa-layer-chevron">&#9662;</span>
+                    </div>
+                    <div class="qa-layer-details">
+                        <ul>
+                            <li><strong>Daily scoring:</strong> A Fraud Dashboard computes and updates fraud grades for every applicant and active participant on a daily basis.</li>
+                            <li><strong>Multi-signal composite:</strong> Grades are based on 10+ individual checks across user quality (email, phone, IP, domain reputation, referral quality) and output quality (event attendance time, contact uniqueness).</li>
+                            <li><strong>Three-tier grading:</strong> Each check produces an IDEAL, YELLOW FLAG, or RED FLAG result. Any yellow flag lowers the applicant's tier. A single red flag makes them ineligible.</li>
+                            <li><strong>Tiering integration:</strong> Fraud grades feed directly into the hiring tier system. Three or more yellow flags push applicants to the lowest tier. Red flags block acceptance entirely.</li>
+                        </ul>
+                        <div class="qa-grade-strip">
+                            <div class="qa-grade low">
+                                <div class="qa-grade-label">Low Risk</div>
+                                <div class="qa-grade-desc">All checks pass. Standard processing.</div>
+                            </div>
+                            <div class="qa-grade medium">
+                                <div class="qa-grade-label">Medium Risk</div>
+                                <div class="qa-grade-desc">Yellow flags detected. Manager review required.</div>
+                            </div>
+                            <div class="qa-grade high">
+                                <div class="qa-grade-label">High Risk</div>
+                                <div class="qa-grade-desc">Red flag detected. Ineligible for program.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layer 3: Post-Acceptance Monitoring -->
+                <div class="qa-layer reveal reveal-delay-3">
+                    <div class="qa-layer-header" onclick="toggleQA(this)">
+                        <div class="qa-layer-icon">&#128200;</div>
+                        <div class="qa-layer-text">
+                            <div class="qa-layer-title">Post-Acceptance Monitoring</div>
+                            <div class="qa-layer-subtitle">Continuous monitoring of participant behavior inside Rally</div>
+                        </div>
+                        <span class="qa-layer-chevron">&#9662;</span>
+                    </div>
+                    <div class="qa-layer-details">
+                        <ul>
+                            <li><strong>Zoom IP cross-referencing:</strong> We compare the IP address used at signup with the IP used to join Zoom training events. Mismatches (e.g., US signup but international Zoom join) are flagged.</li>
+                            <li><strong>Contact entry speed &amp; duplicates:</strong> We monitor for non-unique contacts in a participant&rsquo;s network, and flag contact entry speeds under 30 seconds per contact.</li>
+                            <li><strong>Event attendance time:</strong> Participants averaging less than 20 minutes per training event are flagged as high risk. Under 40 minutes triggers a yellow flag.</li>
+                            <li><strong>Contact uniqueness threshold:</strong> Less than 70% unique contacts is a red flag. Between 70-80% is a yellow flag.</li>
+                            <li><strong>Ongoing fraud score:</strong> A separate BigQuery view assigns each active participant a rolling fraud score combining application-stage checks with in-program behavioral signals.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Layer 4: Third-Party Validation -->
+                <div class="qa-layer reveal reveal-delay-4">
+                    <div class="qa-layer-header" onclick="toggleQA(this)">
+                        <div class="qa-layer-icon">&#9989;</div>
+                        <div class="qa-layer-text">
+                            <div class="qa-layer-title">Third-Party Validation</div>
+                            <div class="qa-layer-subtitle">Independent verification that real conversations are happening</div>
+                        </div>
+                        <span class="qa-layer-chevron">&#9662;</span>
+                    </div>
+                    <div class="qa-layer-details">
+                        <ul>
+                            <li><strong>Survey-based validation:</strong> In 2024, we surveyed people listed as contacts and compared them against a pseudo-control group. Treated respondents were 6.4 percentage points more likely to report that someone had talked to them about voting &mdash; confirming real, memorable outreach is happening.</li>
+                            <li><strong>2026 field QC expansion:</strong> For Our Future's field apparatus will run regular QC SMS and phone campaigns among contacts to establish ongoing baselines and health metrics.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-validation-callout reveal">
+                <p><strong>The infrastructure runs hourly.</strong> External APIs (IP geolocation and email domain reputation) are queried via Cloud Composer on a semi-hourly or hourly basis. Results are piped into BigQuery tables and surfaced through the App Vetting Dashboard in real time. Every application submitted since the last run is automatically checked.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content reveal">
+            <div class="footer-title">Let's Talk</div>
+            <p class="footer-text">Interested in reaching low-propensity voters with proven methods? Let's talk about what's possible.</p>
+            <button class="footer-button" onclick="window.location.href='mailto:hello@relentless.vote'">Email Us</button>
+            <p class="footer-url">relentless.vote</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">&#8249;</button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="">
+        <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">&#8250;</button>
+        <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+
+    <script>
+        // ===== Toggle node details (one open at a time) =====
+        function toggleNode(rowElement) {
+            const allRows = document.querySelectorAll('.node-row');
+            const isExpanded = rowElement.classList.contains('expanded');
+
+            allRows.forEach(row => row.classList.remove('expanded'));
+
+            if (!isExpanded) {
+                rowElement.classList.add('expanded');
+                // Update journey progress bar
+                const node = rowElement.closest('.flowchart-node');
+                const nodes = [...document.querySelectorAll('.flowchart-node')];
+                const idx = nodes.indexOf(node);
+                updateJourneyProgress(idx);
+                // Scroll the opened node to top of viewport after collapse/expand settles
+                setTimeout(() => {
+                    node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
+            } else {
+                updateJourneyProgress(-1);
+            }
+        }
+
+        // ===== Journey progress bar =====
+        function updateJourneyProgress(activeIndex) {
+            const markers = document.querySelectorAll('.journey-marker');
+            const fill = document.getElementById('progressFill');
+            const totalMarkers = markers.length;
+
+            markers.forEach((marker, i) => {
+                marker.classList.remove('active', 'completed');
+                if (i === activeIndex) {
+                    marker.classList.add('active');
+                } else if (i < activeIndex) {
+                    marker.classList.add('completed');
+                }
+            });
+
+            if (activeIndex >= 0) {
+                const pct = (activeIndex / (totalMarkers - 1)) * 100;
+                const maxWidth = document.querySelector('.journey-progress').offsetWidth - 80;
+                fill.style.width = (pct / 100 * maxWidth) + 'px';
+            } else {
+                fill.style.width = '0px';
+            }
+        }
+
+        function jumpToNode(index) {
+            const nodes = document.querySelectorAll('.flowchart-node');
+            if (nodes[index]) {
+                const row = nodes[index].querySelector('.node-row');
+                // Expand it
+                document.querySelectorAll('.node-row').forEach(r => r.classList.remove('expanded'));
+                row.classList.add('expanded');
+                updateJourneyProgress(index);
+                // Scroll into view
+                nodes[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // ===== Toggle deep dive cards =====
+        function toggleDeepDive(headerElement) {
+            const isExpanded = headerElement.classList.contains('expanded');
+            // Close siblings within same deep-dives container
+            const container = headerElement.closest('.deep-dives');
+            if (container) {
+                container.querySelectorAll('.deep-dive-header').forEach(h => h.classList.remove('expanded'));
+            }
+            if (!isExpanded) {
+                headerElement.classList.add('expanded');
+            }
+        }
+
+        // ===== Toggle QA layer details =====
+        function toggleQA(headerElement) {
+            const allHeaders = document.querySelectorAll('.qa-layer-header');
+            const isExpanded = headerElement.classList.contains('expanded');
+
+            allHeaders.forEach(h => h.classList.remove('expanded'));
+
+            if (!isExpanded) {
+                headerElement.classList.add('expanded');
+            }
+        }
+
+        // ===== Close nodes when clicking outside =====
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.flowchart-node') && !e.target.closest('.journey-marker')) {
+                document.querySelectorAll('.node-row.expanded').forEach(row => {
+                    row.classList.remove('expanded');
+                });
+                updateJourneyProgress(-1);
+            }
+        });
+
+        // Close QA layers when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.qa-layer')) {
+                document.querySelectorAll('.qa-layer-header.expanded').forEach(h => {
+                    h.classList.remove('expanded');
+                });
+            }
+        });
+
+        // ===== Lightbox =====
+        let lightboxImages = [];
+        let lightboxIndex = 0;
+
+        function initLightbox() {
+            const imgs = document.querySelectorAll('.screenshot-mosaic img');
+            lightboxImages = [...imgs].map(img => img.src);
+
+            imgs.forEach((img, i) => {
+                img.addEventListener('click', () => openLightbox(i));
+            });
+        }
+
+        function openLightbox(index) {
+            lightboxIndex = index;
+            const overlay = document.getElementById('lightbox');
+            const img = document.getElementById('lightboxImg');
+            const counter = document.getElementById('lightboxCounter');
+
+            img.src = lightboxImages[index];
+            counter.textContent = (index + 1) + ' / ' + lightboxImages.length;
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function navLightbox(dir) {
+            lightboxIndex = (lightboxIndex + dir + lightboxImages.length) % lightboxImages.length;
+            const img = document.getElementById('lightboxImg');
+            const counter = document.getElementById('lightboxCounter');
+            img.src = lightboxImages[lightboxIndex];
+            counter.textContent = (lightboxIndex + 1) + ' / ' + lightboxImages.length;
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navLightbox(-1);
+            if (e.key === 'ArrowRight') navLightbox(1);
+        });
+
+        // Close on overlay click
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+        });
+
+        // ===== Scroll reveal animations =====
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // Nav shadow on scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                        document.querySelector('.nav-links').classList.remove('open');
+                    }
+                }
+            });
+        });
+
+        // Init lightbox after DOM ready
+        initLightbox();
+    </script>
+</body>
+</html>
